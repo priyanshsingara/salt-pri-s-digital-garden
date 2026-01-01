@@ -1,0 +1,91 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getPublishedPosts } from '../lib/notion';
+import { parseContent } from '../lib/content-parser';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  const allPostsSummary = posts.map(p => ({ title: p.title, slug: p.slug }));
+  
+  // Build Backlink Map
+  const backlinks: Record<string, { title: string; slug: string; date: string }[]> = {};
+  
+  posts.forEach(sourcePost => {
+    // Regex for [[Target]] or [[Target|Alias]]
+    const regex = /\[\[(.*?)\]\]/g;
+    let match;
+    while ((match = regex.exec(sourcePost.content)) !== null) {
+      const linkText = match[1];
+      const targetTitle = linkText.includes('|') ? linkText.split('|')[0] : linkText;
+      
+      const targetPost = allPostsSummary.find(p => p.title.toLowerCase() === targetTitle.toLowerCase());
+      if (targetPost) {
+        if (!backlinks[targetPost.slug]) {
+          backlinks[targetPost.slug] = [];
+        }
+        if (!backlinks[targetPost.slug].find(p => p.slug === sourcePost.slug)) {
+          backlinks[targetPost.slug].push({ 
+            title: sourcePost.title, 
+            slug: sourcePost.slug,
+            date: sourcePost.date 
+          });
+        }
+      }
+    }
+  });
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { 
+      post, 
+      allPostsSummary,
+      backlinks: backlinks[post.slug] || []
+    },
+  }));
+}
+
+const { post, allPostsSummary, backlinks } = Astro.props;
+
+// Parse the content (Markdown -> HTML + WikiLinks)
+const htmlContent = await parseContent(post.content, allPostsSummary);
+---
+
+<Layout title={post.title}>
+  <article class="prose prose-ink max-w-none">
+    <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
+    <div class="text-faint text-sm mb-8 flex justify-between items-center">
+      <span>
+        {new Date(post.date).toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        })}
+      </span>
+      <span class="bg-surface px-2 py-1 rounded text-xs">{post.tags.join(', ')}</span>
+    </div>
+    
+    <div class="markdown-body" set:html={htmlContent} />
+  </article>
+
+  {backlinks.length > 0 && (
+    <div class="mt-16 pt-8 border-t border-surface">
+      <h3 class="text-sm font-semibold text-faint uppercase tracking-wider mb-4">Linked to this note</h3>
+      <ul class="flex flex-col gap-3">
+        {backlinks.map(link => (
+          <li>
+            <a href={`/${link.slug}`} class="text-ink font-medium hover:text-link transition-colors">
+              {link.title}
+            </a>
+            <span class="text-faint text-xs ml-2">
+              {new Date(link.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  <div class="mt-12 pt-8 border-t border-surface">
+    <a href="/" class="text-sm text-faint hover:text-ink transition-colors">← Back to Index</a>
+  </div>
+</Layout>

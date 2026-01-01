@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+    --color-paper: #FFFCF0;
+    --color-ink: #100F0F;
+    --color-faint: #B7B5AC;
+    --color-link: #878580;
+    --color-surface: #F2F0E5;
+
+    --font-sans: "Inter", sans-serif;
+}
+
+/* Custom CSS layers if needed, but simple overrides work fine here */
+
+body {
+    @apply bg-paper text-ink;
+}
+
+/* Custom selection color */
+::selection {
+    @apply bg-surface text-ink;
+}
+
+/* Typography styles */
+h1 {
+    @apply text-3xl font-bold mb-4 tracking-tight;
+}
+
+h2 {
+    @apply text-2xl font-semibold mt-8 mb-4 tracking-tight;
+}
+
+h3 {
+    @apply text-xl font-medium mt-6 mb-3;
+}
+
+p {
+    @apply leading-relaxed mb-4 text-[17px];
+}
+
+/* Link logic */
+a {
+    @apply text-link border-b border-surface hover:border-link transition-all duration-200;
+}
+
+/* Header link reset */
+header a {
+    @apply border-none;
+}
+
+/* Blockquotes */
+blockquote {
+    @apply border-l-4 border-surface pl-4 italic text-faint my-6;
+}
+
+/* Code blocks */
+pre {
+    @apply bg-surface p-4 rounded-lg overflow-x-auto my-6 text-sm border border-black/5;
+}
+
+code {
+    @apply bg-surface px-1.5 py-0.5 rounded text-sm text-ink;
+}
