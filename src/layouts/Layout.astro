@@ -19,14 +19,34 @@ const { title, description = "A digital garden." } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+
+		<script is:inline>
+			const theme = (() => {
+				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+					return localStorage.getItem('theme');
+				}
+				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+					return 'dark';
+				}
+				return 'light';
+			})();
+		
+			if (theme === 'dark') {
+				document.documentElement.classList.add('dark');
+			} else {
+				document.documentElement.classList.remove('dark');
+			}
+		
+			window.localStorage.setItem('theme', theme);
+		</script>
 	</head>
 	<body class="bg-paper text-ink font-sans antialiased min-h-screen flex flex-col items-center">
-		<div class="w-full max-w-[680px] px-6 py-12 flex flex-col gap-12">
+		<div class="w-full max-w-[732px] px-4 md:px-6 py-12 flex flex-col gap-12">
 			<Header />
 			<main class="w-full flex flex-col gap-8">
 				<slot />
 			</main>
-			<footer class="text-faint text-sm py-8 border-t border-surface mt-12">
+			<footer class="text-secondary text-sm py-8 border-t border-border mt-12">
 				<p>© {new Date().getFullYear()} Digital Garden. Built with Astro & Notion.</p>
 			</footer>
 		</div>

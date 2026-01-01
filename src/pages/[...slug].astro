@@ -53,7 +53,7 @@ const htmlContent = await parseContent(post.content, allPostsSummary);
 <Layout title={post.title}>
   <article class="prose prose-ink max-w-none">
     <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
-    <div class="text-faint text-sm mb-8 flex justify-between items-center">
+    <div class="text-secondary text-sm mb-8 flex justify-between items-center">
       <span>
         {new Date(post.date).toLocaleDateString('en-US', { 
           year: 'numeric', 
@@ -68,15 +68,15 @@ const htmlContent = await parseContent(post.content, allPostsSummary);
   </article>
 
   {backlinks.length > 0 && (
-    <div class="mt-16 pt-8 border-t border-surface">
-      <h3 class="text-sm font-semibold text-faint uppercase tracking-wider mb-4">Linked to this note</h3>
+    <div class="mt-16 pt-8 border-t border-border">
+      <h3 class="text-sm font-semibold text-secondary uppercase tracking-wider mb-4">Linked to this note</h3>
       <ul class="flex flex-col gap-3">
         {backlinks.map(link => (
           <li>
-            <a href={`/${link.slug}`} class="text-ink font-medium hover:text-link transition-colors">
+            <a href={`/${link.slug}`} class="text-ink font-medium hover:text-secondary transition-colors">
               {link.title}
             </a>
-            <span class="text-faint text-xs ml-2">
+            <span class="text-secondary text-xs ml-2">
               {new Date(link.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
             </span>
           </li>
@@ -85,7 +85,7 @@ const htmlContent = await parseContent(post.content, allPostsSummary);
     </div>
   )}
 
-  <div class="mt-12 pt-8 border-t border-surface">
-    <a href="/" class="text-sm text-faint hover:text-ink transition-colors">← Back to Index</a>
+  <div class="mt-12 pt-8 border-t border-border">
+    <a href="/" class="text-sm text-secondary hover:text-ink transition-colors">← Back to Index</a>
   </div>
 </Layout>

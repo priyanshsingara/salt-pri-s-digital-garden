@@ -41,12 +41,26 @@ export async function getPublishedPosts(): Promise<Post[]> {
         response.results.map(async (page: any) => {
             const id = page.id;
 
-            // Extract properties safely
+            // Extract properties safely - Notion titles can be in different properties
             const properties = page.properties;
-            const title = properties.Name?.title[0]?.plain_text || 'Untitled';
+
+            // First try common property names, then fall back to the page title
+            let title = 'Untitled';
+            if (properties.Title?.title?.[0]?.plain_text) {
+                title = properties.Title.title[0].plain_text;
+            } else if (properties.Name?.title?.[0]?.plain_text) {
+                title = properties.Name.title[0].plain_text;
+            } else {
+                // Fallback to page title if custom properties don't exist
+                const titleProp = Object.values(properties).find((prop: any) => prop.type === 'title');
+                if (titleProp && (titleProp as any).title?.[0]?.plain_text) {
+                    title = (titleProp as any).title[0].plain_text;
+                }
+            }
+
             const slug = properties.Slug?.rich_text[0]?.plain_text || id;
             const date = properties.Date?.date?.start || page.created_time;
-            const tags = properties.Tags?.multi_select?.map((t: any) => t.name) || [];
+            const tags = (properties.Tags || properties.TAGS || properties.tags)?.multi_select?.map((t: any) => t.name) || [];
 
             // Convert blocks to Markdown
             const mdBlocks = await n2m.pageToMarkdown(id);

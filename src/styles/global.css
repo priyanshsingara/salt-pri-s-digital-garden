@@ -1,63 +1,113 @@
 @import "tailwindcss";
 
 @theme {
-    --color-paper: #FFFCF0;
-    --color-ink: #100F0F;
-    --color-faint: #B7B5AC;
-    --color-link: #878580;
-    --color-surface: #F2F0E5;
+    /* Colors */
+    --color-paper: var(--bg-paper);
+    --color-ink: var(--text-main);
+    --color-prose: var(--text-prose);
+    --color-secondary: var(--text-secondary);
+    --color-border: var(--border-subtle);
 
+    /* Typography - Rounded from Figma */
+    --text-base: 20px;
+    /* Figma ~19.8px */
+    --text-lg: 22px;
+    /* Figma ~21.9px */
+    --text-sm: 16px;
+    /* Figma ~16.2px */
+    --text-xs: 14px;
+    /* Standard small */
+
+    --font-normal: 400;
+    --font-medium: 500;
     --font-sans: "Inter", sans-serif;
 }
 
-/* Custom CSS layers if needed, but simple overrides work fine here */
+:root {
+    /* Primitives - Light */
+    --color-base-cream: #FFFCF0;
+    --color-base-black: #100F0F;
+    --color-base-gray-dark: #6F6E69;
+    /* Ironside Gray */
+    --color-base-gray-light: #E6E4D9;
+    /* Satin Linen */
 
-body {
-    @apply bg-paper text-ink;
+    /* Semantic Tokens - Light */
+    --bg-paper: var(--color-base-cream);
+    --text-main: var(--color-base-black);
+    --text-prose: var(--color-base-black);
+    /* Main body text */
+    --text-secondary: var(--color-base-gray-dark);
+    --border-subtle: var(--color-base-gray-light);
 }
 
-/* Custom selection color */
+.dark {
+    /* Primitives - Dark (Inverted logic) */
+    --color-dark-bg: #100F0F;
+    --color-dark-text: #FFFCF0;
+    --color-dark-secondary: #878580;
+    --color-dark-border: #1C1B1A;
+
+    /* Semantic Tokens - Dark */
+    --bg-paper: var(--color-dark-bg);
+    --text-main: var(--color-dark-text);
+    --text-prose: #EAE8DC;
+    /* Slightly softened white */
+    --text-secondary: var(--color-dark-secondary);
+    --border-subtle: var(--color-dark-border);
+}
+
+body {
+    @apply bg-paper text-ink font-sans text-base antialiased;
+}
+
 ::selection {
-    @apply bg-surface text-ink;
+    @apply bg-border text-ink;
 }
 
 /* Typography styles */
 h1 {
-    @apply text-3xl font-bold mb-4 tracking-tight;
+    @apply text-3xl font-medium mb-6 tracking-tight text-ink;
 }
 
 h2 {
-    @apply text-2xl font-semibold mt-8 mb-4 tracking-tight;
+    @apply text-lg font-medium mt-10 mb-4 tracking-tight text-ink;
 }
 
 h3 {
-    @apply text-xl font-medium mt-6 mb-3;
+    @apply text-base font-medium mt-8 mb-3 text-ink;
 }
 
 p {
-    @apply leading-relaxed mb-4 text-[17px];
+    @apply leading-relaxed mb-6 text-prose max-w-prose;
+    font-size: var(--text-base);
+    line-height: 1.6;
 }
 
 /* Link logic */
 a {
-    @apply text-link border-b border-surface hover:border-link transition-all duration-200;
+    @apply text-secondary border-b border-border hover:border-secondary transition-all duration-200;
 }
 
-/* Header link reset */
 header a {
-    @apply border-none;
+    @apply border-none text-ink hover:text-secondary;
+}
+
+/* Meta text (dates, small info) */
+.meta {
+    @apply text-sm text-secondary;
 }
 
 /* Blockquotes */
 blockquote {
-    @apply border-l-4 border-surface pl-4 italic text-faint my-6;
+    @apply border-l-4 border-border pl-4 italic text-secondary my-8;
 }
 
 /* Code blocks */
 pre {
-    @apply bg-surface p-4 rounded-lg overflow-x-auto my-6 text-sm border border-black/5;
+    @apply bg-paper border border-border p-4 rounded-lg overflow-x-auto my-8 text-sm;
 }
 
 code {
-    @apply bg-surface px-1.5 py-0.5 rounded text-sm text-ink;
+    @apply bg-border/30 px-1.5 py-0.5 rounded text-sm text-ink;
 }

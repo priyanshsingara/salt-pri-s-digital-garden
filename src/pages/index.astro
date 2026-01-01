@@ -19,8 +19,12 @@ try {
   error = "Failed to load Digital Garden. Check API keys.";
 }
 
-// Separate archive posts
-const archivePosts = posts.slice(1);
+// Get unique tags for Topics section
+const allTags = posts.flatMap(post => post.tags);
+const uniqueTags = [...new Set(allTags)].sort();
+
+// Writing section (all posts)
+const writingPosts = posts;
 ---
 
 <Layout title="Digital Garden">
@@ -32,52 +36,70 @@ const archivePosts = posts.slice(1);
   )}
 
   {!latestPost && !error && (
-    <div class="text-faint italic py-12 text-center">
+    <div class="text-secondary italic py-12 text-center">
       Garden is currently empty. Write something in Notion!
     </div>
   )}
 
   {latestPost && (
-    <article class="prose prose-ink max-w-none">
-      <h1 class="text-3xl font-bold mb-2">{latestPost.title}</h1>
-      <div class="text-faint text-sm mb-8">
-        {new Date(latestPost.date).toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}
-      </div>
-      
-      {/* 
-        This is where we render the Markdown content. 
-        In a real Astro app, we might use a Markdown component <Markdown /> 
-        or set:html with a parser like 'marked'.
-        For now, we'll output raw text or basic HTML depending on notion-to-md result.
-        Since notion-to-md returns markdown string, we ideally need a parser here.
-        But let's assume raw markdown for a second or use a simple parser.
-        Wait, I should install 'marked' to render this markdown HTML.
-      */}
-      <div class="markdown-body" set:html={marked.parse(latestPost.content)} />
-    </article>
-  )}
+    <>
+      <!-- Latest Section -->
+      <section class="mb-16">
+        <h2 class="text-sm font-medium text-secondary uppercase tracking-wider mb-6">Latest</h2>
+        <article class="prose prose-ink max-w-none">
+          <h1 class="text-3xl font-medium mb-3 tracking-tight">{latestPost.title}</h1>
+          <div class="text-secondary text-sm mb-8">
+            {new Date(latestPost.date).toLocaleDateString('en-US', { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}
+          </div>
+          
+          <div class="markdown-body" set:html={marked.parse(latestPost.content)} />
+        </article>
+      </section>
 
-  {archivePosts.length > 0 && (
-    <section class="mt-16 pt-16 border-t border-surface">
-      <h2 class="text-xl font-semibold mb-6">Archive</h2>
-      <ul class="flex flex-col gap-4">
-        {archivePosts.map((post) => (
-          <li>
-            <a href={`/${post.slug}`} class="flex items-baseline justify-between group border-b-0 hover:border-b-0">
-              <span class="text-ink font-medium group-hover:text-link transition-colors">
-                {post.title}
-              </span>
-              <span class="text-faint text-sm shrink-0">
-                {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </section>
+      <!-- Topics Section -->
+      {uniqueTags.length > 0 && (
+        <section class="mb-16">
+          <h2 class="text-sm font-medium text-secondary uppercase tracking-wider mb-6">Topics</h2>
+          <div class="flex flex-wrap gap-x-2 gap-y-2">
+            {uniqueTags.map((tag, index) => (
+              <>
+                <a 
+                  href={`/topics/${tag.toLowerCase()}`}
+                  class="text-ink hover:text-secondary transition-colors border-b border-transparent hover:border-secondary"
+                >
+                  {tag}
+                </a>
+                {index < uniqueTags.length - 1 && <span class="text-secondary">,</span>}
+              </>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Writing Section -->
+      {writingPosts.length > 0 && (
+        <section>
+          <h2 class="text-sm font-medium text-secondary uppercase tracking-wider mb-6">Writing</h2>
+          <ul class="flex flex-col gap-3">
+            {writingPosts.map((post) => (
+              <li>
+                <a href={`/${post.slug}`} class="group flex items-baseline gap-3 hover:text-secondary transition-colors">
+                  <span class="text-secondary text-sm shrink-0 font-mono">
+                    {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric' })} · {new Date(post.date).toLocaleDateString('en-US', { month: '2-digit' })}
+                  </span>
+                  <span class="text-ink group-hover:text-secondary transition-colors">
+                    {post.title}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </>
   )}
 </Layout>
