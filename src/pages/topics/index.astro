@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { getPublishedPosts } from '../../lib/notion';
 
 export const prerender = false;
-Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=1, stale-while-revalidate=59');
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=43200, stale-while-revalidate=86400');
 
 const posts = await getPublishedPosts();
 

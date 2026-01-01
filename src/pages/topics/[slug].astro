@@ -5,8 +5,8 @@ import type { Post } from '../../lib/notion';
 
 export const prerender = false;
 
-// Aggressive caching: fast delivery (stale), immediate background update
-Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=1, stale-while-revalidate=59');
+// Cache for 12 hours
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=43200, stale-while-revalidate=86400');
 
 const { slug } = Astro.params;
 const tag = decodeURIComponent(slug || '');
