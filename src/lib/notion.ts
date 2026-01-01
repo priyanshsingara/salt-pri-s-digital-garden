@@ -19,23 +19,43 @@ export interface Post {
 
 export async function getPublishedPosts(): Promise<Post[]> {
     const databaseId = import.meta.env.NOTION_DATABASE_ID;
+    const apiKey = import.meta.env.NOTION_API_KEY;
 
-    // Fetch pages from Notion Database
-    const response = await notion.databases.query({
-        database_id: databaseId,
-        // filter: {
-        //     property: 'Status',
-        //     select: {
-        //         equals: 'Published',
-        //     },
-        // },
-        sorts: [
-            {
-                timestamp: 'created_time',
-                direction: 'descending',
-            },
-        ],
-    });
+    // Log for debugging (will appear in Vercel Function Logs)
+    console.log('[Notion] Fetching posts...');
+    console.log('[Notion] API Key exists:', !!apiKey);
+    console.log('[Notion] Database ID:', databaseId);
+
+    if (!apiKey || !databaseId) {
+        console.error('[Notion] Missing credentials!');
+        throw new Error('NOTION_API_KEY or NOTION_DATABASE_ID not configured');
+    }
+
+    let response;
+    try {
+        // Fetch pages from Notion Database
+        response = await notion.databases.query({
+            database_id: databaseId,
+            // filter: {
+            //     property: 'Status',
+            //     select: {
+            //         equals: 'Published',
+            //     },
+            // },
+            sorts: [
+                {
+                    timestamp: 'created_time',
+                    direction: 'descending',
+                },
+            ],
+        });
+
+        console.log('[Notion] Fetched', response.results.length, 'posts');
+    } catch (error) {
+        console.error('[Notion] Error fetching posts from database:', error);
+        throw new Error('Failed to fetch posts from Notion database.');
+    }
+
 
     const posts = await Promise.all(
         response.results.map(async (page: any) => {
