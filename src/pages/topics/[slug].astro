@@ -23,23 +23,21 @@ if (filteredPosts.length === 0) {
 ---
 
 <Layout title={`${tag} - Digital Garden`}>
-  <header class="mb-12">
-    <div class="text-secondary text-sm mb-2">Topic</div>
-    <h1 class="text-3xl font-bold capitalize">{tag}</h1>
+  <header class="mb-10">
+    <h1 class="text-[33px] font-medium tracking-[-0.01em] text-text-main capitalize">{tag}</h1>
+    <hr class="border-ui-border my-10" />
   </header>
 
-  <ul class="flex flex-col gap-8">
+  <ul class="flex flex-col gap-3">
     {filteredPosts.map((post) => (
       <li>
-        <a href={`/${post.slug}`} class="group block">
-          <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-1">
-            <h2 class="text-lg font-medium text-ink group-hover:text-secondary transition-colors m-0">
-              {post.title}
-            </h2>
-            <span class="text-secondary text-sm shrink-0 font-mono">
-              {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'numeric' })}
-            </span>
-          </div>
+        <a href={`/${post.slug}`} class="group flex items-baseline gap-3 hover:text-text-muted transition-colors no-underline">
+          <span class="text-text-muted shrink-0 text-[16px]">
+            {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric' })} · {new Date(post.date).toLocaleDateString('en-US', { month: '2-digit' })}
+          </span>
+          <span class="text-text-main group-hover:text-text-muted transition-colors">
+            {post.title}
+          </span>
         </a>
       </li>
     ))}

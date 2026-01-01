@@ -51,9 +51,9 @@ const currentBacklinks = backlinks[post.slug] || [];
 ---
 
 <Layout title={post.title}>
-  <article class="prose prose-ink max-w-none">
-    <h1 class="text-3xl font-bold mb-2">{post.title}</h1>
-    <div class="text-secondary text-sm mb-8 flex justify-between items-center">
+  <article class="prose max-w-none">
+    <h1 class="text-[33px] font-medium tracking-[-0.01em] mb-4 text-text-main">{post.title}</h1>
+    <div class="text-text-muted text-[16px] mb-12 flex items-baseline gap-4">
       <span>
         {new Date(post.date).toLocaleDateString('en-US', { 
           year: 'numeric', 
@@ -61,31 +61,39 @@ const currentBacklinks = backlinks[post.slug] || [];
           day: 'numeric' 
         })}
       </span>
-      <span class="bg-surface px-2 py-1 rounded text-xs">{post.tags.join(', ')}</span>
+      {/* Optional: Display tags cleanly if desired, or remove if too cluttered */}
+      {post.tags.length > 0 && (
+         <span class="text-text-faint">•</span>
+      )}
+      {post.tags.length > 0 && (
+        <span class="text-text-muted">{post.tags.join(', ')}</span>
+      )}
     </div>
     
-    <div class="markdown-body" set:html={htmlContent} />
+    <div class="markdown-body text-[19px] leading-relaxed text-text-main" set:html={htmlContent} />
   </article>
 
-  {backlinks.length > 0 && (
-    <div class="mt-16 pt-8 border-t border-border">
-      <h3 class="text-sm font-semibold text-secondary uppercase tracking-wider mb-4">Linked to this note</h3>
+  {currentBacklinks.length > 0 && (
+    <div class="mt-16 pt-8 border-t border-ui-border">
+      <h3 class="text-text-muted font-medium mb-6 mt-0">Linked to this note</h3>
       <ul class="flex flex-col gap-3">
         {currentBacklinks.map(link => (
           <li>
-            <a href={`/${link.slug}`} class="text-ink font-medium hover:text-secondary transition-colors">
-              {link.title}
+            <a href={`/${link.slug}`} class="group flex items-baseline gap-3 hover:text-text-muted transition-colors no-underline">
+               <span class="text-text-muted shrink-0 text-[16px]">
+                  {new Date(link.date).toLocaleDateString('en-US', { year: 'numeric' })} · {new Date(link.date).toLocaleDateString('en-US', { month: '2-digit' })}
+                </span>
+              <span class="text-text-main group-hover:text-text-muted transition-colors">
+                {link.title}
+              </span>
             </a>
-            <span class="text-secondary text-xs ml-2">
-              {new Date(link.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-            </span>
           </li>
         ))}
       </ul>
     </div>
   )}
 
-  <div class="mt-12 pt-8 border-t border-border">
-    <a href="/" class="text-sm text-secondary hover:text-ink transition-colors">← Back to Index</a>
+  <div class="mt-12 pt-8 border-t border-ui-border">
+    <a href="/" class="text-link hover:text-link/80 transition-colors">← Back to Index</a>
   </div>
 </Layout>

@@ -10,29 +10,26 @@ const posts = await getPublishedPosts();
 // Aggregate tags
 const allTags = posts.flatMap(post => post.tags);
 const uniqueTags = [...new Set(allTags)].sort();
-
-// Calculate counts (optional, but nice)
-const tagCounts = allTags.reduce((acc, tag) => {
-  acc[tag] = (acc[tag] || 0) + 1;
-  return acc;
-}, {} as Record<string, number>);
 ---
 
 <Layout title="Topics - Digital Garden">
-  <h1 class="text-3xl font-bold mb-8">Topics</h1>
+  <h1 class="text-[33px] font-medium tracking-[-0.01em] mb-10 text-text-main">Topics</h1>
   
-  <div class="flex flex-wrap gap-x-6 gap-y-3">
-    {uniqueTags.map(tag => (
-      <a 
-        href={`/topics/${tag.toLowerCase()}`}
-        class="text-lg text-ink border-b border-border hover:border-ink transition-colors"
-      >
-        {tag} <span class="text-secondary text-sm ml-1">{tagCounts[tag]}</span>
-      </a>
+  <div class="flex flex-wrap gap-x-2 gap-y-2">
+    {uniqueTags.map((tag, index) => (
+      <>
+        <a 
+          href={`/topics/${tag.toLowerCase()}`}
+          class="text-text-main hover:text-text-muted transition-colors"
+        >
+          {tag}
+        </a>
+        {index < uniqueTags.length - 1 && <span class="text-text-muted">,</span>}
+      </>
     ))}
   </div>
 
   {uniqueTags.length === 0 && (
-    <p class="text-secondary italic">No topics found yet.</p>
+    <p class="text-text-muted italic">No topics found yet.</p>
   )}
 </Layout>

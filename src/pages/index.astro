@@ -2,21 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import { getPublishedPosts } from '../lib/notion';
 import type { Post } from '../lib/notion';
-import { marked } from 'marked';
 
 export const prerender = false;
 Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=43200, stale-while-revalidate=86400');
 
 // Fetch data at build time
 let posts: Post[] = [];
-let latestPost: Post | null = null;
 let error = '';
 
 try {
   posts = await getPublishedPosts();
-  if (posts.length > 0) {
-    latestPost = posts[0];
-  }
 } catch (e) {
   console.error("Failed to fetch Notion posts:", e);
   error = "Failed to load Digital Garden. Check API keys.";
@@ -38,71 +33,62 @@ const writingPosts = posts;
     </div>
   )}
 
-  {!latestPost && !error && (
-    <div class="text-secondary italic py-12 text-center">
+  {!posts.length && !error && (
+    <div class="text-text-muted italic py-12 text-center">
       Garden is currently empty. Write something in Notion!
     </div>
   )}
 
-  {latestPost && (
+  {posts.length > 0 && (
     <>
-      <!-- Latest Section -->
-      <section class="mb-16">
-        <h2 class="text-sm font-medium text-secondary uppercase tracking-wider mb-6">Latest</h2>
-        <article class="prose prose-ink max-w-none">
-          <h1 class="text-3xl font-medium mb-3 tracking-tight">{latestPost.title}</h1>
-          <div class="text-secondary text-sm mb-8">
-            {new Date(latestPost.date).toLocaleDateString('en-US', { 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            })}
-          </div>
-          
-          <div class="markdown-body" set:html={marked.parse(latestPost.content)} />
-        </article>
+      <section>
+        <p class="text-xl leading-relaxed text-text-main">
+          Welcome to my digital garden.
+        </p>
       </section>
 
       <!-- Topics Section -->
       {uniqueTags.length > 0 && (
-        <section class="mb-16">
-          <h2 class="text-sm font-medium text-secondary uppercase tracking-wider mb-6">Topics</h2>
-          <div class="flex flex-wrap gap-x-2 gap-y-2">
-            {uniqueTags.map((tag, index) => (
-              <>
-                <a 
-                  href={`/topics/${tag.toLowerCase()}`}
-                  class="text-ink hover:text-secondary transition-colors border-b border-transparent hover:border-secondary"
-                >
-                  {tag}
-                </a>
-                {index < uniqueTags.length - 1 && <span class="text-secondary">,</span>}
-              </>
-            ))}
-          </div>
-        </section>
+        <>
+          <hr class="border-ui-border my-10" />
+          <section>
+            <h2 class="text-text-muted font-medium mb-6 mt-0">Topics</h2>
+            <div class="flex flex-wrap gap-x-2 gap-y-2">
+              {uniqueTags.map((tag, index) => (
+                <>
+                  <a 
+                    href={`/topics/${tag.toLowerCase()}`}
+                    class="text-text-main hover:text-text-muted transition-colors"
+                  >
+                    {tag}
+                  </a>
+                  {index < uniqueTags.length - 1 && <span class="text-text-muted">,</span>}
+                </>
+              ))}
+            </div>
+          </section>
+        </>
       )}
 
       <!-- Writing Section -->
-      {writingPosts.length > 0 && (
-        <section>
-          <h2 class="text-sm font-medium text-secondary uppercase tracking-wider mb-6">Writing</h2>
-          <ul class="flex flex-col gap-3">
-            {writingPosts.map((post) => (
-              <li>
-                <a href={`/${post.slug}`} class="group flex items-baseline gap-3 hover:text-secondary transition-colors">
-                  <span class="text-secondary text-sm shrink-0 font-mono">
-                    {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric' })} · {new Date(post.date).toLocaleDateString('en-US', { month: '2-digit' })}
-                  </span>
-                  <span class="text-ink group-hover:text-secondary transition-colors">
-                    {post.title}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <hr class="border-ui-border my-10" />
+      <section>
+        <h2 class="text-text-muted font-medium mb-6 mt-0">Writing</h2>
+        <ul class="flex flex-col gap-3">
+          {writingPosts.map((post) => (
+            <li>
+              <a href={`/${post.slug}`} class="group flex items-baseline gap-3 hover:text-text-muted transition-colors no-underline">
+                <span class="text-text-muted shrink-0 text-[16px]">
+                  {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric' })} · {new Date(post.date).toLocaleDateString('en-US', { month: '2-digit' })}
+                </span>
+                <span class="text-text-main group-hover:text-text-muted transition-colors">
+                  {post.title}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
     </>
   )}
 </Layout>

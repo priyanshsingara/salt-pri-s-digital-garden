@@ -18,6 +18,11 @@ const { title, description = "A digital garden." } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
+
 		<title>{title}</title>
 
 		<script is:inline>
@@ -40,13 +45,13 @@ const { title, description = "A digital garden." } = Astro.props;
 			window.localStorage.setItem('theme', theme);
 		</script>
 	</head>
-	<body class="bg-paper text-ink font-sans antialiased min-h-screen flex flex-col items-center">
-		<div class="w-full max-w-[732px] px-4 md:px-6 py-12 flex flex-col gap-12">
+	<body class="bg-bg-main text-text-main font-sans antialiased min-h-screen flex flex-col items-center">
+		<div class="w-full max-w-[732px] px-6 py-12">
 			<Header />
-			<main class="w-full flex flex-col gap-8">
+			<main class="w-full">
 				<slot />
 			</main>
-			<footer class="text-secondary text-sm py-8 border-t border-border mt-12">
+			<footer class="text-text-muted text-sm py-8 border-t border-ui-border mt-12">
 				<p>© {new Date().getFullYear()} Digital Garden. Built with Astro & Notion.</p>
 			</footer>
 		</div>

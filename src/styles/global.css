@@ -1,113 +1,153 @@
 @import "tailwindcss";
 
 @theme {
-    /* Colors */
-    --color-paper: var(--bg-paper);
-    --color-ink: var(--text-main);
-    --color-prose: var(--text-prose);
-    --color-secondary: var(--text-secondary);
-    --color-border: var(--border-subtle);
+    /* 
+       Flexoki System Colors 
+       Source: https://stephango.com/flexoki 
+    */
 
-    /* Typography - Rounded from Figma */
-    --text-base: 20px;
-    /* Figma ~19.8px */
-    --text-lg: 22px;
-    /* Figma ~21.9px */
-    --text-sm: 16px;
-    /* Figma ~16.2px */
-    --text-xs: 14px;
-    /* Standard small */
+    /* Base - Warm Grayscale */
+    --color-flexoki-black: #100F0F;
+    --color-flexoki-950: #1C1B1A;
+    --color-flexoki-900: #282726;
+    --color-flexoki-850: #343331;
+    --color-flexoki-800: #403E3C;
+    --color-flexoki-700: #575653;
+    --color-flexoki-600: #6F6E69;
+    --color-flexoki-500: #878580;
+    --color-flexoki-300: #B7B5AC;
+    --color-flexoki-200: #CECDC3;
+    --color-flexoki-150: #DAD8CE;
+    --color-flexoki-100: #E6E4D9;
+    --color-flexoki-50: #F2F0E5;
+    --color-flexoki-paper: #FFFCF0;
 
-    --font-normal: 400;
-    --font-medium: 500;
-    --font-sans: "Inter", sans-serif;
+    /* Accents - Light Mode (600) */
+    --color-red-600: #AF3029;
+    --color-orange-600: #BC5215;
+    --color-yellow-600: #AD8301;
+    --color-green-600: #66800B;
+    --color-cyan-600: #24837B;
+    --color-blue-600: #205EA6;
+    --color-purple-600: #5E409D;
+    --color-magenta-600: #A02F6F;
+
+    /* Accents - Dark Mode (400) */
+    --color-red-400: #D14D41;
+    --color-orange-400: #DA702C;
+    --color-yellow-400: #D0A215;
+    --color-green-400: #879A39;
+    --color-cyan-400: #3AA99F;
+    --color-blue-400: #4385BE;
+    --color-purple-400: #8B7EC8;
+    --color-magenta-400: #CE5D97;
+
+    /* Semantic Token Aliases for Tailwind */
+    --color-bg-main: var(--bg-main);
+    --color-bg-subtle: var(--bg-subtle);
+    --color-ui-border: var(--ui-border);
+    --color-ui-hover: var(--ui-hover);
+
+    --color-text-main: var(--text-main);
+    --color-text-muted: var(--text-muted);
+    --color-text-faint: var(--text-faint);
+
+    --color-link: var(--link);
+    --color-link-hover: var(--link-hover);
+
+    /* Fonts */
+    --font-sans: "Geist", sans-serif;
+    --font-mono: "Geist Mono", monospace;
 }
 
 :root {
-    /* Primitives - Light */
-    --color-base-cream: #FFFCF0;
-    --color-base-black: #100F0F;
-    --color-base-gray-dark: #6F6E69;
-    /* Ironside Gray */
-    --color-base-gray-light: #E6E4D9;
-    /* Satin Linen */
+    /* Semantic Mappings - Light Mode */
+    --bg-main: var(--color-flexoki-paper);
+    --bg-subtle: var(--color-flexoki-50);
 
-    /* Semantic Tokens - Light */
-    --bg-paper: var(--color-base-cream);
-    --text-main: var(--color-base-black);
-    --text-prose: var(--color-base-black);
-    /* Main body text */
-    --text-secondary: var(--color-base-gray-dark);
-    --border-subtle: var(--color-base-gray-light);
+    --ui-border: var(--color-flexoki-200);
+    --ui-hover: var(--color-flexoki-150);
+
+    --text-main: var(--color-flexoki-black);
+    --text-muted: var(--color-flexoki-600);
+    --text-faint: var(--color-flexoki-300);
+
+    --link: var(--color-blue-600);
+    --link-hover: var(--color-blue-600);
 }
 
 .dark {
-    /* Primitives - Dark (Inverted logic) */
-    --color-dark-bg: #100F0F;
-    --color-dark-text: #FFFCF0;
-    --color-dark-secondary: #878580;
-    --color-dark-border: #1C1B1A;
+    /* Semantic Mappings - Dark Mode */
+    --bg-main: var(--color-flexoki-black);
+    --bg-subtle: var(--color-flexoki-950);
 
-    /* Semantic Tokens - Dark */
-    --bg-paper: var(--color-dark-bg);
-    --text-main: var(--color-dark-text);
-    --text-prose: #EAE8DC;
-    /* Slightly softened white */
-    --text-secondary: var(--color-dark-secondary);
-    --border-subtle: var(--color-dark-border);
+    --ui-border: var(--color-flexoki-800);
+    --ui-hover: var(--color-flexoki-850);
+
+    --text-main: var(--color-flexoki-paper);
+    --text-muted: var(--color-flexoki-500);
+    --text-faint: var(--color-flexoki-700);
+
+    --link: var(--color-blue-400);
+    --link-hover: var(--color-blue-400);
 }
 
 body {
-    @apply bg-paper text-ink font-sans text-base antialiased;
-}
-
-::selection {
-    @apply bg-border text-ink;
+    @apply bg-bg-main text-text-main font-sans antialiased selection:bg-ui-hover selection:text-text-main;
+    font-size: 19px;
+    letter-spacing: 0;
 }
 
 /* Typography styles */
 h1 {
-    @apply text-3xl font-medium mb-6 tracking-tight text-ink;
+    @apply font-medium mb-8 text-text-main;
+    font-size: 33px;
+    letter-spacing: -0.01em;
 }
 
 h2 {
-    @apply text-lg font-medium mt-10 mb-4 tracking-tight text-ink;
+    @apply text-xl font-medium mt-12 mb-6 text-text-main;
+    letter-spacing: -0.01em;
 }
 
 h3 {
-    @apply text-base font-medium mt-8 mb-3 text-ink;
+    @apply text-lg font-medium mt-8 mb-4 text-text-main;
+    letter-spacing: -0.01em;
 }
 
 p {
-    @apply leading-relaxed mb-6 text-prose max-w-prose;
-    font-size: var(--text-base);
-    line-height: 1.6;
+    @apply leading-relaxed mb-6 text-text-main max-w-[65ch];
 }
 
-/* Link logic */
+/* Links */
 a {
-    @apply text-secondary border-b border-border hover:border-secondary transition-all duration-200;
+    @apply text-link hover:text-link/80 transition-colors duration-200 underline decoration-ui-border underline-offset-4 hover:decoration-link;
 }
 
 header a {
-    @apply border-none text-ink hover:text-secondary;
+    @apply no-underline text-text-main hover:text-text-muted border-none;
 }
 
-/* Meta text (dates, small info) */
+/* Meta text */
 .meta {
-    @apply text-sm text-secondary;
+    @apply text-sm text-text-muted;
 }
 
 /* Blockquotes */
 blockquote {
-    @apply border-l-4 border-border pl-4 italic text-secondary my-8;
+    @apply border-l-4 border-ui-border pl-6 italic text-text-muted my-8;
 }
 
 /* Code blocks */
 pre {
-    @apply bg-paper border border-border p-4 rounded-lg overflow-x-auto my-8 text-sm;
+    @apply bg-bg-subtle border border-ui-border p-4 rounded-lg overflow-x-auto my-8 text-sm font-mono;
 }
 
 code {
-    @apply bg-border/30 px-1.5 py-0.5 rounded text-sm text-ink;
+    @apply bg-bg-subtle px-1.5 py-0.5 rounded text-sm text-text-main font-mono;
+}
+
+/* Dividers */
+hr {
+    @apply border-ui-border my-12 border-t;
 }
