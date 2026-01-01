@@ -1,5 +1,5 @@
 {
-    "buildCommand": "npm run build",
+    "buildCommand": "echo \"Build triggered at $(date)\" && npm run build",
     "outputDirectory": "dist",
     "framework": "astro"
 }
