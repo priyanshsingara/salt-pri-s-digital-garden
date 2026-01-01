@@ -2,6 +2,9 @@
 import Layout from '../../layouts/Layout.astro';
 import { getPublishedPosts } from '../../lib/notion';
 
+export const prerender = false;
+Astro.response.headers.set('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
+
 const posts = await getPublishedPosts();
 
 // Aggregate tags

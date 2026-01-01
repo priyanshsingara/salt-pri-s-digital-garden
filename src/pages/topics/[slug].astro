@@ -3,25 +3,23 @@ import Layout from '../../layouts/Layout.astro';
 import { getPublishedPosts } from '../../lib/notion';
 import type { Post } from '../../lib/notion';
 
-export async function getStaticPaths() {
-  const posts = await getPublishedPosts();
-  const allTags = new Set(posts.flatMap(post => post.tags));
-  
-  return [...allTags].map(tag => ({
-    params: { slug: tag.toLowerCase() },
-    props: { tag },
-  }));
-}
+export const prerender = false;
 
-interface Props {
-  tag: string;
-}
+// 1 Hour Caching
+Astro.response.headers.set('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
 
-const { tag } = Astro.props;
+const { slug } = Astro.params;
+const tag = decodeURIComponent(slug || '');
+
 const posts = await getPublishedPosts();
 const filteredPosts = posts.filter(post => 
   post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
 );
+
+if (filteredPosts.length === 0) {
+  return Astro.redirect('/404');
+}
+
 ---
 
 <Layout title={`${tag} - Digital Garden`}>

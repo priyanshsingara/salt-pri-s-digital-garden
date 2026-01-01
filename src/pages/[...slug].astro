@@ -3,51 +3,51 @@ import Layout from '../layouts/Layout.astro';
 import { getPublishedPosts } from '../lib/notion';
 import { parseContent } from '../lib/content-parser';
 
-export async function getStaticPaths() {
-  const posts = await getPublishedPosts();
-  const allPostsSummary = posts.map(p => ({ title: p.title, slug: p.slug }));
-  
-  // Build Backlink Map
-  const backlinks: Record<string, { title: string; slug: string; date: string }[]> = {};
-  
-  posts.forEach(sourcePost => {
-    // Regex for [[Target]] or [[Target|Alias]]
-    const regex = /\[\[(.*?)\]\]/g;
-    let match;
-    while ((match = regex.exec(sourcePost.content)) !== null) {
-      const linkText = match[1];
-      const targetTitle = linkText.includes('|') ? linkText.split('|')[0] : linkText;
-      
-      const targetPost = allPostsSummary.find(p => p.title.toLowerCase() === targetTitle.toLowerCase());
-      if (targetPost) {
-        if (!backlinks[targetPost.slug]) {
-          backlinks[targetPost.slug] = [];
-        }
-        if (!backlinks[targetPost.slug].find(p => p.slug === sourcePost.slug)) {
-          backlinks[targetPost.slug].push({ 
-            title: sourcePost.title, 
-            slug: sourcePost.slug,
-            date: sourcePost.date 
-          });
-        }
-      }
-    }
-  });
+export const prerender = false;
 
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { 
-      post, 
-      allPostsSummary,
-      backlinks: backlinks[post.slug] || []
-    },
-  }));
+// 1 Hour Caching (fresh enough for a blog, resilient to rate limits)
+Astro.response.headers.set('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
+
+const { slug } = Astro.params;
+const posts = await getPublishedPosts();
+const post = posts.find(p => p.slug === slug);
+
+if (!post) {
+  return Astro.redirect('/404');
 }
 
-const { post, allPostsSummary, backlinks } = Astro.props;
+const allPostsSummary = posts.map(p => ({ title: p.title, slug: p.slug }));
+
+// Build Backlink Map
+const backlinks: Record<string, { title: string; slug: string; date: string }[]> = {};
+
+posts.forEach(sourcePost => {
+  // Regex for [[Target]] or [[Target|Alias]]
+  const regex = /\[\[(.*?)\]\]/g;
+  let match;
+  while ((match = regex.exec(sourcePost.content)) !== null) {
+    const linkText = match[1];
+    const targetTitle = linkText.includes('|') ? linkText.split('|')[0] : linkText;
+    
+    const targetPost = allPostsSummary.find(p => p.title.toLowerCase() === targetTitle.toLowerCase());
+    if (targetPost) {
+      if (!backlinks[targetPost.slug]) {
+        backlinks[targetPost.slug] = [];
+      }
+      if (!backlinks[targetPost.slug].find(p => p.slug === sourcePost.slug)) {
+        backlinks[targetPost.slug].push({ 
+          title: sourcePost.title, 
+          slug: sourcePost.slug,
+          date: sourcePost.date 
+        });
+      }
+    }
+  }
+});
 
 // Parse the content (Markdown -> HTML + WikiLinks)
 const htmlContent = await parseContent(post.content, allPostsSummary);
+const currentBacklinks = backlinks[post.slug] || [];
 ---
 
 <Layout title={post.title}>
@@ -71,7 +71,7 @@ const htmlContent = await parseContent(post.content, allPostsSummary);
     <div class="mt-16 pt-8 border-t border-border">
       <h3 class="text-sm font-semibold text-secondary uppercase tracking-wider mb-4">Linked to this note</h3>
       <ul class="flex flex-col gap-3">
-        {backlinks.map(link => (
+        {currentBacklinks.map(link => (
           <li>
             <a href={`/${link.slug}`} class="text-ink font-medium hover:text-secondary transition-colors">
               {link.title}

@@ -4,6 +4,9 @@ import { getPublishedPosts } from '../lib/notion';
 import type { Post } from '../lib/notion';
 import { marked } from 'marked';
 
+export const prerender = false;
+Astro.response.headers.set('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
+
 // Fetch data at build time
 let posts: Post[] = [];
 let latestPost: Post | null = null;
