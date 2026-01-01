@@ -8,7 +8,12 @@ import vercel from '@astrojs/vercel';
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  adapter: vercel(),
+  adapter: vercel({
+    isr: {
+      // Cache pages for 1 hour at the edge
+      expiration: 3600,
+    },
+  }),
 
   devToolbar: {
     enabled: false
