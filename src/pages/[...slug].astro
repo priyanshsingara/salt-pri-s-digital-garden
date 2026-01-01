@@ -5,8 +5,8 @@ import { parseContent } from '../lib/content-parser';
 
 export const prerender = false;
 
-// 1 Hour Caching (fresh enough for a blog, resilient to rate limits)
-Astro.response.headers.set('Cache-Control', 's-maxage=3600, stale-while-revalidate=600');
+// Aggressive caching: fast delivery (stale), immediate background update
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=1, stale-while-revalidate=59');
 
 const { slug } = Astro.params;
 const posts = await getPublishedPosts();
