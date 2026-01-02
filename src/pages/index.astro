@@ -1,12 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Feed from '../components/Feed';
 import { getPublishedPosts } from '../lib/notion';
 import type { Post } from '../lib/notion';
 
 export const prerender = false;
 Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=43200, stale-while-revalidate=86400');
 
-// Fetch data at build time
 let posts: Post[] = [];
 let error = '';
 
@@ -17,15 +17,20 @@ try {
   error = "Failed to load Digital Garden. Check API keys.";
 }
 
-// Get unique tags for Topics section
-const allTags = posts.flatMap(post => post.tags);
-const uniqueTags = [...new Set(allTags)].sort();
+// Calculate Topic Counts
+const tagCounts: Record<string, number> = {};
+posts.forEach(post => {
+  post.tags.forEach(tag => {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  });
+});
 
-// Writing section (all posts)
-const writingPosts = posts;
+const uniqueTopics = Object.entries(tagCounts)
+  .map(([name, count]) => ({ name, count }))
+  .sort((a, b) => a.name.localeCompare(b.name));
 ---
 
-<Layout title="Digital Garden">
+<Layout title="Priyansh Singara">
   {error && (
     <div class="bg-red-50 text-red-600 p-4 rounded-lg border border-red-200">
       <p class="font-bold">Error:</p>
@@ -40,55 +45,26 @@ const writingPosts = posts;
   )}
 
   {posts.length > 0 && (
-    <>
-      <section>
-        <p class="text-xl leading-relaxed text-text-main">
-          Welcome to my digital garden.
+    <div class="flex flex-col gap-[36px] mt-[36px]">
+      <!-- Divider 1 -->
+      <hr class="border-0 h-px w-full bg-ui-border" />
+
+      <!-- Bio Section with internal 36px gap -->
+      <section class="flex flex-col gap-[36px]">
+        <p class="text-[18px] leading-[1.5] text-text-muted m-0">
+          I design and build software products, leaning into the sweet spot where creative technology meets liberal arts. Outside work, you'll usually find me behind a camera, geeking out over typography, print design, and practicing fine art. I'm also big on coffee culture and keeping an active lifestyle.
+        </p>
+        
+        <p class="text-[18px] leading-[1.5] text-text-muted m-0">
+          Reach out via <a href="mailto:hello@priyanshsingara.com" class="text-text-main hover:text-text-muted transition-colors underline decoration-ui-border underline-offset-4">email</a> or <a href="https://cal.com/priyanshsingara" class="text-text-main hover:text-text-muted transition-colors underline decoration-ui-border underline-offset-4">schedule time here.</a>
         </p>
       </section>
 
-      <!-- Topics Section -->
-      {uniqueTags.length > 0 && (
-        <>
-          <hr class="border-ui-border my-10" />
-          <section>
-            <h2 class="text-text-muted font-medium mb-6 mt-0">Topics</h2>
-            <div class="flex flex-wrap gap-x-2 gap-y-2">
-              {uniqueTags.map((tag, index) => (
-                <>
-                  <a 
-                    href={`/topics/${tag.toLowerCase()}`}
-                    class="text-text-main hover:text-text-muted transition-colors"
-                  >
-                    {tag}
-                  </a>
-                  {index < uniqueTags.length - 1 && <span class="text-text-muted">,</span>}
-                </>
-              ))}
-            </div>
-          </section>
-        </>
-      )}
+      <!-- Divider 2 -->
+      <hr class="border-0 h-px w-full bg-ui-border" />
 
-      <!-- Writing Section -->
-      <hr class="border-ui-border my-10" />
-      <section>
-        <h2 class="text-text-muted font-medium mb-6 mt-0">Writing</h2>
-        <ul class="flex flex-col gap-3">
-          {writingPosts.map((post) => (
-            <li>
-              <a href={`/${post.slug}`} class="group flex items-baseline gap-3 hover:text-text-muted transition-colors no-underline">
-                <span class="text-text-muted shrink-0 text-[16px]">
-                  {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric' })} · {new Date(post.date).toLocaleDateString('en-US', { month: '2-digit' })}
-                </span>
-                <span class="text-text-main group-hover:text-text-muted transition-colors">
-                  {post.title}
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </>
+      <!-- Feed (Tabs + Card Container) -->
+      <Feed client:load posts={posts} topics={uniqueTopics} />
+    </div>
   )}
 </Layout>

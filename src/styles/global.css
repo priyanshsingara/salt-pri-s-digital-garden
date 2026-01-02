@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
     /* 
@@ -65,15 +66,18 @@
     --bg-main: var(--color-flexoki-paper);
     --bg-subtle: var(--color-flexoki-50);
 
-    --ui-border: var(--color-flexoki-200);
+    --ui-border: var(--color-flexoki-100);
+    /* Fixed: Was 200, now 100 to match Figma #E6E4D9 */
     --ui-hover: var(--color-flexoki-150);
 
     --text-main: var(--color-flexoki-black);
     --text-muted: var(--color-flexoki-600);
     --text-faint: var(--color-flexoki-300);
 
-    --link: var(--color-blue-600);
-    --link-hover: var(--color-blue-600);
+    --link: var(--color-cyan-400);
+    /* Fixed: Was 600, now 400 to match Figma #3AA99F */
+    --link-hover: var(--color-cyan-600);
+    /* Keep hover slightly darker/different or same? Standard is same usually for simple text links, but let's keep 600 for contrast on hover? Or just 400? Let's try 600 for interaction feedback. */
 }
 
 .dark {
@@ -81,20 +85,22 @@
     --bg-main: var(--color-flexoki-black);
     --bg-subtle: var(--color-flexoki-950);
 
-    --ui-border: var(--color-flexoki-800);
+    --ui-border: var(--color-flexoki-950);
+    /* Updated to darker border */
     --ui-hover: var(--color-flexoki-850);
 
     --text-main: var(--color-flexoki-paper);
     --text-muted: var(--color-flexoki-500);
     --text-faint: var(--color-flexoki-700);
 
-    --link: var(--color-blue-400);
-    --link-hover: var(--color-blue-400);
+    --link: var(--color-cyan-400);
+    --link-hover: var(--color-cyan-400);
 }
 
 body {
     @apply bg-bg-main text-text-main font-sans antialiased selection:bg-ui-hover selection:text-text-main;
-    font-size: 19px;
+    font-size: 18px;
+    /* Updated to 18px */
     letter-spacing: 0;
 }
 
@@ -130,7 +136,8 @@ header a {
 
 /* Meta text */
 .meta {
-    @apply text-sm text-text-muted;
+    @apply text-[16px] text-text-muted font-mono;
+    /* Explicit 16px Mono */
 }
 
 /* Blockquotes */
@@ -140,14 +147,14 @@ blockquote {
 
 /* Code blocks */
 pre {
-    @apply bg-bg-subtle border border-ui-border p-4 rounded-lg overflow-x-auto my-8 text-sm font-mono;
+    @apply bg-bg-subtle border border-ui-border p-4 rounded-lg overflow-x-auto my-8 text-[16px] font-mono;
 }
 
 code {
-    @apply bg-bg-subtle px-1.5 py-0.5 rounded text-sm text-text-main font-mono;
+    @apply bg-bg-subtle px-1.5 py-0.5 rounded text-[16px] text-text-main font-mono;
 }
 
 /* Dividers */
 hr {
-    @apply border-ui-border my-12 border-t;
+    @apply border-ui-border border-t m-0;
 }

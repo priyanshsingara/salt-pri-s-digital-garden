@@ -2,16 +2,14 @@
 import ThemeToggle from './ThemeToggle.tsx';
 ---
 
-<header class="flex justify-between items-baseline mb-8">
-  <div class="flex gap-4 items-baseline">
-    <a href="/" class="text-xl font-medium text-ink hover:text-secondary transition-colors duration-200">
-        Digital Garden
-    </a>
-  </div>
-  <nav class="flex gap-6 text-sm items-center">
-    <a href="/" class="text-ink hover:text-secondary transition-colors">Index</a>
-    <a href="/topics" class="text-ink hover:text-secondary transition-colors">Topics</a>
-    <a href="/about" class="text-ink hover:text-secondary transition-colors">About</a>
+<header class="flex justify-between items-center w-full mb-0">
+  <a href="/" class="text-[18px] font-semibold text-text-main hover:text-text-muted transition-colors no-underline">
+    Priyansh Singara
+  </a>
+  <nav class="flex gap-[16px] items-center text-[18px] text-text-muted">
+    <a href="https://twitter.com/priyanshsingara" target="_blank" rel="noopener" class="hover:text-text-main transition-colors no-underline">x(twitter)</a>
+    <a href="https://linkedin.com/in/priyanshsingara" target="_blank" rel="noopener" class="hover:text-text-main transition-colors no-underline">linkedin</a>
+    <a href="https://priyanshsingara.com" target="_blank" rel="noopener" class="hover:text-text-main transition-colors no-underline">portfolio</a>
     <ThemeToggle client:load />
   </nav>
 </header>

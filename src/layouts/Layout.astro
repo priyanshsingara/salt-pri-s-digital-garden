@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 
@@ -24,8 +25,10 @@ const { title, description = "A digital garden." } = Astro.props;
 		<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap" rel="stylesheet">
 
 		<title>{title}</title>
+        <ClientRouter />
 
-		<script is:inline>
+		<!-- Theme persistence script - runs on every page load including transitions -->
+		<script is:inline data-astro-rerun>
 			const theme = (() => {
 				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
 					return localStorage.getItem('theme');
@@ -41,18 +44,16 @@ const { title, description = "A digital garden." } = Astro.props;
 			} else {
 				document.documentElement.classList.remove('dark');
 			}
-		
-			window.localStorage.setItem('theme', theme);
 		</script>
 	</head>
 	<body class="bg-bg-main text-text-main font-sans antialiased min-h-screen flex flex-col items-center">
-		<div class="w-full max-w-[732px] px-6 py-12">
+		<div class="w-full max-w-[680px] px-6 pt-[36px] pb-12 flex flex-col">
 			<Header />
 			<main class="w-full">
 				<slot />
 			</main>
 			<footer class="text-text-muted text-sm py-8 border-t border-ui-border mt-12">
-				<p>© {new Date().getFullYear()} Digital Garden. Built with Astro & Notion.</p>
+				<p>© {new Date().getFullYear()} Priyansh Singara. Built with Astro & Notion.</p>
 			</footer>
 		</div>
 	</body>
