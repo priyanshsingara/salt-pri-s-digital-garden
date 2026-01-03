@@ -8,6 +8,27 @@ const notion = new Client({
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
+// Custom transformer for callout blocks
+n2m.setCustomTransformer("callout", async (block: any) => {
+    const callout = block.callout;
+    if (!callout) return "";
+
+    // Get the icon (emoji or external image)
+    let iconHtml = "";
+    if (callout.icon?.type === "emoji") {
+        iconHtml = `<span class="callout-icon">${callout.icon.emoji}</span>`;
+    } else if (callout.icon?.type === "external") {
+        iconHtml = `<img class="callout-icon" src="${callout.icon.external.url}" alt="" />`;
+    }
+
+    // Get the rich text content
+    const textContent = callout.rich_text
+        ?.map((t: any) => t.plain_text)
+        .join("") || "";
+
+    return `<div class="callout">${iconHtml}<span class="callout-content">${textContent}</span></div>`;
+});
+
 export interface Post {
     id: string;
     slug: string;

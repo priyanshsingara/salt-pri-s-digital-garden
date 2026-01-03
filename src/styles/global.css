@@ -146,32 +146,317 @@ a:hover {
     @apply text-[16px] text-text-muted font-mono;
 }
 
-/* Scoped Prose Styles (Restoring margins ONLY for blog content) */
-.markdown-body p {
+/* =============================================================================
+   BLOG CONTENT STYLES (.markdown-body only)
+   These styles ONLY apply inside blog post content, not homepage or other pages
+   ============================================================================= */
+
+/* Base spacing for all block elements */
+.markdown-body>* {
     margin-bottom: 24px;
+}
+
+.markdown-body>*:last-child {
+    margin-bottom: 0;
+}
+
+/* Paragraphs */
+.markdown-body p {
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+/* =============================================================================
+   HEADINGS - Scoped spacing that doesn't affect global headings
+   ============================================================================= */
+
+.markdown-body h1 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.32px;
+    margin-top: 48px;
+    margin-bottom: 16px;
+    color: var(--text-main);
+}
+
+.markdown-body h1:first-child {
+    margin-top: 0;
 }
 
 .markdown-body h2 {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0;
     margin-top: 48px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
+    color: var(--text-main);
+}
+
+.markdown-body h2:first-child {
+    margin-top: 0;
 }
 
 .markdown-body h3 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0;
     margin-top: 32px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
+    color: var(--text-main);
 }
+
+.markdown-body h3:first-child {
+    margin-top: 0;
+}
+
+/* =============================================================================
+   LISTS - Bulleted, Numbered, and Nested
+   ============================================================================= */
 
 .markdown-body ul,
 .markdown-body ol {
+    margin-top: 0;
     margin-bottom: 24px;
+    padding-left: 24px;
 }
 
+/* Unordered lists - bullet styles */
+.markdown-body ul {
+    list-style-type: disc;
+}
+
+.markdown-body ul ul {
+    list-style-type: circle;
+    margin-bottom: 0;
+}
+
+.markdown-body ul ul ul {
+    list-style-type: square;
+}
+
+/* Ordered lists - number styles */
+.markdown-body ol {
+    list-style-type: decimal;
+}
+
+.markdown-body ol ol {
+    list-style-type: lower-alpha;
+    margin-bottom: 0;
+}
+
+.markdown-body ol ol ol {
+    list-style-type: lower-roman;
+}
+
+/* List items */
 .markdown-body li {
     margin-bottom: 8px;
+    line-height: 1.6;
 }
 
-/* Mobile Typography Updates (<400px) */
-@media (max-width: 400px) {
+.markdown-body li:last-child {
+    margin-bottom: 0;
+}
+
+/* Nested lists inside list items */
+.markdown-body li>ul,
+.markdown-body li>ol {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+/* =============================================================================
+   CODE BLOCKS AND INLINE CODE
+   ============================================================================= */
+
+/* Block-level code */
+.markdown-body pre {
+    margin-top: 0;
+    margin-bottom: 24px;
+    padding: 16px;
+    background-color: var(--bg-subtle);
+    border: 1px solid var(--ui-border);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.markdown-body pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+}
+
+/* Inline code - within sentences */
+.markdown-body code {
+    background-color: var(--bg-subtle);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--text-main);
+}
+
+/* =============================================================================
+   BLOCKQUOTES
+   ============================================================================= */
+
+.markdown-body blockquote {
+    margin: 0 0 24px 0;
+    padding: 0 0 0 16px;
+    border-left: 3px solid var(--ui-border);
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.markdown-body blockquote p {
+    margin-bottom: 0;
+}
+
+/* =============================================================================
+   CALLOUTS (Notion callout blocks)
+   ============================================================================= */
+
+.markdown-body .callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    background-color: var(--bg-subtle);
+    border-radius: 8px;
+    border: 1px solid var(--ui-border);
+}
+
+.markdown-body .callout-icon {
+    flex-shrink: 0;
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.markdown-body .callout-icon img {
+    width: 20px;
+    height: 20px;
+}
+
+.markdown-body .callout-content {
+    flex: 1;
+    line-height: 1.6;
+}
+
+/* =============================================================================
+   TABLES
+   ============================================================================= */
+
+.markdown-body table {
+    width: 100%;
+    margin-bottom: 24px;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.markdown-body thead {
+    border-bottom: 2px solid var(--ui-border);
+}
+
+.markdown-body th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.markdown-body td {
+    padding: 12px;
+    border-bottom: 1px solid var(--ui-border);
+    color: var(--text-main);
+}
+
+.markdown-body tr:last-child td {
+    border-bottom: none;
+}
+
+/* =============================================================================
+   IMAGES AND CAPTIONS
+   ============================================================================= */
+
+.markdown-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 8px 0;
+}
+
+/* Figure with caption */
+.markdown-body figure {
+    margin: 0 0 24px 0;
+}
+
+.markdown-body figcaption {
+    margin-top: 8px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* =============================================================================
+   HORIZONTAL RULES / DIVIDERS
+   ============================================================================= */
+
+.markdown-body hr {
+    margin: 32px 0;
+    border: none;
+    border-top: 1px solid var(--ui-border);
+}
+
+/* =============================================================================
+   TEXT FORMATTING
+   ============================================================================= */
+
+.markdown-body strong {
+    font-weight: 600;
+}
+
+.markdown-body em {
+    font-style: italic;
+}
+
+.markdown-body del {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+/* =============================================================================
+   LINKS WITHIN CONTENT
+   ============================================================================= */
+
+.markdown-body a {
+    color: var(--link);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.markdown-body a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* Wiki links */
+.markdown-body .wiki-link {
+    color: var(--link);
+}
+
+.markdown-body .wiki-link-dead {
+    color: var(--text-muted);
+    cursor: not-allowed;
+}
+
+/* Mobile Typography Updates (<640px) */
+@media (max-width: 640px) {
     body {
         font-size: 16px;
     }
@@ -182,24 +467,100 @@ a:hover {
         font-size: 14px !important;
     }
 
-    /* Scale down other text if needed */
-}
+    /* =========================================================================
+       MOBILE OPTIMIZATION FOR BLOG CONTENT (.markdown-body)
+       ========================================================================= */
 
-/* Blockquotes */
-blockquote {
-    @apply border-l-4 border-ui-border pl-6 italic text-text-muted my-8;
-}
+    /* Scale down headings for mobile */
+    .markdown-body h1 {
+        font-size: 24px;
+        margin-top: 28px;
+        margin-bottom: 12px;
+    }
 
-/* Code blocks */
-pre {
-    @apply bg-bg-subtle border border-ui-border p-4 rounded-lg overflow-x-auto my-8 text-[16px] font-mono;
-}
+    .markdown-body h2 {
+        font-size: 20px;
+        margin-top: 28px;
+        margin-bottom: 12px;
+    }
 
-code {
-    @apply bg-bg-subtle px-1.5 py-0.5 rounded text-[16px] text-text-main font-mono;
-}
+    .markdown-body h3 {
+        font-size: 17px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
 
-/* Dividers */
-hr {
-    @apply border-ui-border border-t m-0;
+    /* Reduce spacing for mobile */
+    .markdown-body p {
+        margin-bottom: 16px;
+    }
+
+    .markdown-body>* {
+        margin-bottom: 16px;
+    }
+
+    /* Lists - reduce indentation and spacing */
+    .markdown-body ul,
+    .markdown-body ol {
+        padding-left: 20px;
+        margin-bottom: 16px;
+    }
+
+    .markdown-body li {
+        margin-bottom: 6px;
+    }
+
+    /* Code blocks - smaller text and padding */
+    .markdown-body pre {
+        font-size: 14px;
+        padding: 12px;
+        margin-bottom: 16px;
+        border-radius: 6px;
+    }
+
+    .markdown-body code {
+        font-size: 0.85em;
+        padding: 2px 4px;
+    }
+
+    /* Callouts - compact for mobile */
+    .markdown-body .callout {
+        padding: 12px;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .markdown-body .callout-icon {
+        font-size: 18px;
+    }
+
+    /* Tables - scrollable container with smaller text */
+    .markdown-body table {
+        font-size: 14px;
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .markdown-body th,
+    .markdown-body td {
+        padding: 8px;
+    }
+
+    /* Images - slightly smaller border radius */
+    .markdown-body img {
+        border-radius: 6px;
+        margin: 6px 0;
+    }
+
+    /* Blockquotes - reduce padding */
+    .markdown-body blockquote {
+        padding-left: 12px;
+        margin-bottom: 16px;
+    }
+
+    /* Horizontal rules */
+    .markdown-body hr {
+        margin: 24px 0;
+    }
 }
