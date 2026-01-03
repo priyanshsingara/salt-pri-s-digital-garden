@@ -69,7 +69,7 @@ export default function Tabs({ activeTab, onTabChange }: TabsProps) {
                 onClick={() => onTabChange('thoughts')}
                 isDark={isDark}
             >
-                unfiltered thoughts
+                thoughts
             </TabButton>
 
             <TabButton
