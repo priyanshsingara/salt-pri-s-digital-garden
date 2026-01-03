@@ -51,26 +51,27 @@ const currentBacklinks = backlinks[post.slug] || [];
 ---
 
 <Layout title={post.title}>
-  <article class="prose max-w-none">
-    <h1 class="text-[33px] font-medium tracking-[-0.01em] mb-4 text-text-main">{post.title}</h1>
-    <div class="text-text-muted text-[16px] mb-12 flex items-baseline gap-4">
-      <span>
-        {new Date(post.date).toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}
-      </span>
-      {/* Optional: Display tags cleanly if desired, or remove if too cluttered */}
-      {post.tags.length > 0 && (
-         <span class="text-text-faint">•</span>
-      )}
-      {post.tags.length > 0 && (
-        <span class="text-text-muted">{post.tags.join(', ')}</span>
-      )}
+  <article class="prose max-w-none mt-[44px]">
+    <div class="flex flex-col gap-[4px] mb-[44px]">
+        <h1 class="text-[32px] leading-[1.5] font-semibold tracking-[-0.32px] text-[#cecdc3] !m-0">{post.title}</h1>
+        <div class="flex items-center gap-[8px] text-[18px] leading-[1.5] font-light font-sans">
+        <span class="text-[#878580]">
+            {new Date(post.date).toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+            })}
+        </span>
+        {post.tags.length > 0 && (
+            <span class="text-[#575653]">•</span>
+        )}
+        {post.tags.length > 0 && (
+            <span class="text-[#878580]">{post.tags.join(', ')}</span>
+        )}
+        </div>
     </div>
     
-    <div class="markdown-body text-[19px] leading-relaxed text-text-main" set:html={htmlContent} />
+    <div class="markdown-body text-[18px] leading-relaxed text-text-main" set:html={htmlContent} />
   </article>
 
   {currentBacklinks.length > 0 && (
@@ -93,7 +94,5 @@ const currentBacklinks = backlinks[post.slug] || [];
     </div>
   )}
 
-  <div class="mt-12 pt-8 border-t border-ui-border">
-    <a href="/" class="text-link hover:text-link/80 transition-colors">← Back to Index</a>
-  </div>
+
 </Layout>

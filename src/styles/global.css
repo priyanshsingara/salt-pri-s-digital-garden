@@ -71,7 +71,8 @@
     --ui-hover: var(--color-flexoki-150);
 
     --text-main: var(--color-flexoki-black);
-    --text-muted: var(--color-flexoki-600);
+    /* Fixed: Was 600, now 500 to match Figma */
+    --text-muted: var(--color-flexoki-500);
     --text-faint: var(--color-flexoki-300);
 
     --link: var(--color-cyan-400);
@@ -89,7 +90,9 @@
     /* Updated to darker border */
     --ui-hover: var(--color-flexoki-850);
 
-    --text-main: var(--color-flexoki-paper);
+    /* Updated to match Figma #CECDC3 */
+    --text-main: var(--color-flexoki-200);
+    /* Updated to match Figma #878580 */
     --text-muted: var(--color-flexoki-500);
     --text-faint: var(--color-flexoki-700);
 
@@ -106,19 +109,21 @@ body {
 
 /* Typography styles */
 h1 {
-    @apply font-medium mb-8 text-text-main;
-    font-size: 33px;
-    letter-spacing: -0.01em;
+    @apply font-semibold mb-8 text-text-main;
+    font-size: 32px;
+    letter-spacing: -0.32px;
 }
 
 h2 {
-    @apply text-xl font-medium mt-12 mb-6 text-text-main;
-    letter-spacing: -0.01em;
+    @apply text-xl font-semibold mt-12 mb-6 text-text-main;
+    font-size: 24px;
+    letter-spacing: 0;
 }
 
 h3 {
-    @apply text-lg font-medium mt-8 mb-4 text-text-main;
-    letter-spacing: -0.01em;
+    @apply text-lg font-semibold mt-8 mb-4 text-text-main;
+    font-size: 18px;
+    letter-spacing: 0;
 }
 
 p {
@@ -134,9 +139,7 @@ a:hover {
     @apply underline decoration-link underline-offset-4;
 }
 
-header a {
-    @apply no-underline text-text-main hover:text-text-muted border-none;
-}
+
 
 /* Meta text */
 .meta {
