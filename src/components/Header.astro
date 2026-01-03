@@ -2,14 +2,12 @@
 import ThemeToggle from './ThemeToggle.tsx';
 ---
 
-<header class="flex justify-between items-center w-full mb-0">
-  <a href="/" class="text-[18px] font-semibold text-text-main hover:text-text-muted transition-colors no-underline">
-    Priyansh Singara
-  </a>
-  <nav class="flex gap-[16px] items-center text-[18px] text-text-muted">
-    <a href="https://twitter.com/priyanshsingara" target="_blank" rel="noopener" class="hover:text-text-main transition-colors no-underline">x(twitter)</a>
-    <a href="https://linkedin.com/in/priyanshsingara" target="_blank" rel="noopener" class="hover:text-text-main transition-colors no-underline">linkedin</a>
-    <a href="https://priyanshsingara.com" target="_blank" rel="noopener" class="hover:text-text-main transition-colors no-underline">portfolio</a>
-    <ThemeToggle client:load />
-  </nav>
-</header>
+<div class="flex items-center justify-between w-full mb-0 font-sans text-[18px] leading-[1.5] text-text-main whitespace-nowrap">
+    <a href="/" class="font-semibold no-underline !text-text-main hover:!text-link transition-colors">
+        Priyansh Singara
+    </a>
+    <div class="flex items-center justify-end gap-[16px] w-[362px]">
+        <a href="/about" class="font-normal !text-text-muted hover:!text-link transition-colors no-underline hover:no-underline">about</a>
+        <ThemeToggle client:load />
+    </div>
+</div>

@@ -122,12 +122,16 @@ h3 {
 }
 
 p {
-    @apply leading-relaxed mb-6 text-text-main max-w-[65ch];
+    @apply leading-relaxed text-text-main max-w-[65ch];
 }
 
 /* Links */
 a {
-    @apply text-link hover:text-link/80 transition-colors duration-200 underline decoration-ui-border underline-offset-4 hover:decoration-link;
+    @apply text-link no-underline transition-colors duration-200;
+}
+
+a:hover {
+    @apply underline decoration-link underline-offset-4;
 }
 
 header a {
@@ -137,7 +141,45 @@ header a {
 /* Meta text */
 .meta {
     @apply text-[16px] text-text-muted font-mono;
-    /* Explicit 16px Mono */
+}
+
+/* Scoped Prose Styles (Restoring margins ONLY for blog content) */
+.markdown-body p {
+    margin-bottom: 24px;
+}
+
+.markdown-body h2 {
+    margin-top: 48px;
+    margin-bottom: 24px;
+}
+
+.markdown-body h3 {
+    margin-top: 32px;
+    margin-bottom: 16px;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+    margin-bottom: 24px;
+}
+
+.markdown-body li {
+    margin-bottom: 8px;
+}
+
+/* Mobile Typography Updates (<400px) */
+@media (max-width: 400px) {
+    body {
+        font-size: 16px;
+    }
+
+    .meta,
+    code,
+    pre {
+        font-size: 14px !important;
+    }
+
+    /* Scale down other text if needed */
 }
 
 /* Blockquotes */

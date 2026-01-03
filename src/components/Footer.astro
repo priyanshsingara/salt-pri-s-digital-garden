@@ -1,0 +1,35 @@
+---
+const today = new Date();
+---
+
+<footer class="flex flex-col gap-[36px] w-full mt-[50px] mb-[60px]">
+	<hr class="border-0 h-px w-full bg-ui-border !my-0" />
+	
+	<div class="flex flex-col gap-[16px]">
+		<!-- "Receive my updates" - Using text-faint for stricter muted look -->
+		<p class="text-[18px] !text-text-faint leading-[1.5] mb-0 font-normal">
+			Receive my updates
+		</p>
+		
+		<div class="flex flex-col gap-[8px]">
+			<!-- Social Links -->
+			<p class="text-[18px] text-text-main leading-[1.5] mb-0 font-normal">
+				Follow me via email, 
+				<a href="/rss.xml" class="underline hover:decoration-link !text-link hover:text-link-hover transition-colors decoration-link underline-offset-4">
+					RSS
+				</a>, 
+				<a href="https://twitter.com/priyanshsingara" class="underline hover:decoration-link !text-link hover:text-link-hover transition-colors decoration-link underline-offset-4">
+					Twitter
+				</a>, and 
+				<a href="#" class="underline hover:decoration-link !text-link hover:text-link-hover transition-colors decoration-link underline-offset-4">
+					other options
+				</a>
+			</p>
+			
+			<!-- Copyright -->
+			<p class="text-[18px] font-semibold text-text-main leading-[1.5] mb-0">
+				© {today.getFullYear()}, Priyansh Singara.
+			</p>
+		</div>
+	</div>
+</footer>
