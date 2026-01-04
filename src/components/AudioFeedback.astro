@@ -15,21 +15,34 @@
                     const audio = new Audio('/sounds/click-feedback.mp3');
                     audio.volume = 0.5;
                     
-                    // Navigate after a short delay to allow audio to play
-                    audio.play().then(() => {
+                    // Play audio and wait longer before navigating
+                    const playPromise = audio.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => {
+                                // Audio started playing, wait a bit for it to be audible
+                                setTimeout(() => {
+                                    window.location.href = href;
+                                }, 150); // Increased delay to ensure audio is heard
+                            })
+                            .catch((error) => {
+                                // Audio playback blocked or failed
+                                console.warn('Audio playback failed:', error);
+                                window.location.href = href;
+                            });
+                    } else {
+                        // Fallback if play() doesn't return a promise
                         setTimeout(() => {
                             window.location.href = href;
-                        }, 50); // Small delay to ensure audio starts
-                    }).catch(() => {
-                        // If audio fails, navigate immediately
-                        window.location.href = href;
-                    });
+                        }, 150);
+                    }
                 } else {
                     // For non-link elements, just play audio
                     const audio = new Audio('/sounds/click-feedback.mp3');
                     audio.volume = 0.5;
-                    audio.play().catch(() => {
-                        // Ignore autoplay errors
+                    audio.play().catch((error) => {
+                        console.warn('Audio playback failed:', error);
                     });
                 }
             }
