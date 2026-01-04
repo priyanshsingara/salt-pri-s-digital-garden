@@ -4,23 +4,30 @@ import { getPublishedPosts } from '../../lib/notion';
 import type { Post } from '../../lib/notion';
 import BlogCard from '../../components/BlogCard';
 
-export const prerender = false;
-
-// Cache for 12 hours
-Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=43200, stale-while-revalidate=86400');
-
-const { slug } = Astro.params;
-const tag = decodeURIComponent(slug || '');
-
-const posts = await getPublishedPosts();
-const filteredPosts = posts.filter(post => 
-  post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
-);
-
-if (filteredPosts.length === 0) {
-  return Astro.redirect('/404');
+// Generate all topic pages at build time
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  
+  // Get all unique tags
+  const tagSet = new Set<string>();
+  posts.forEach(post => post.tags.forEach(tag => tagSet.add(tag.toLowerCase())));
+  
+  // Generate a page for each tag
+  return Array.from(tagSet).map(tag => {
+    const filteredPosts = posts.filter(post => 
+      post.tags.some(t => t.toLowerCase() === tag)
+    );
+    const displayTag = posts.find(p => p.tags.some(t => t.toLowerCase() === tag))
+      ?.tags.find(t => t.toLowerCase() === tag) || tag;
+    
+    return {
+      params: { slug: tag },
+      props: { tag: displayTag, filteredPosts }
+    };
+  });
 }
 
+const { tag, filteredPosts } = Astro.props;
 ---
 
 <Layout title={`${tag} - Digital Garden`}>

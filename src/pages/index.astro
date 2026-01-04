@@ -4,8 +4,7 @@ import Feed from '../components/Feed';
 import { getPublishedPosts } from '../lib/notion';
 import type { Post } from '../lib/notion';
 
-export const prerender = false;
-Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=43200, stale-while-revalidate=86400');
+// Page is pre-rendered at build time
 
 let posts: Post[] = [];
 let error = '';

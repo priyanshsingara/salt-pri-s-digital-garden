@@ -1,5 +1,6 @@
 import { Client } from '@notionhq/client';
 import { NotionToMarkdown } from 'notion-to-md';
+import { syncImages, cleanupOrphanedImages } from './image-sync';
 
 const notion = new Client({
     auth: import.meta.env.NOTION_API_KEY,
@@ -110,7 +111,10 @@ export async function getPublishedPosts(): Promise<Post[]> {
             // Custom transformation for Wiki Links [[Link]] -> [Link](/notes/slug)
             // Note: This is a basic implementation. Robust bidirectional linking requires 
             // scanning all slugs first which we will do in the 'Digital Garden Engine' phase.
-            const content = mdString.parent || "";
+            const rawContent = mdString.parent || "";
+
+            // Download images and rewrite URLs to local paths
+            const content = await syncImages(rawContent);
 
             return {
                 id,
@@ -122,6 +126,9 @@ export async function getPublishedPosts(): Promise<Post[]> {
             };
         })
     );
+
+    // Clean up orphaned images (from deleted blog posts)
+    cleanupOrphanedImages();
 
     // Manual filter for 'Published' status if the property exists
     // If Status property is missing, we include it (assuming it's a simple db)
