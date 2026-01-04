@@ -1,0 +1,19 @@
+<script>
+    document.addEventListener('click', (e) => {
+        const target = e.target;
+        // Check if the clicked element or any of its parents have the data-audio-click attribute
+        const audioTrigger = target.closest('[data-audio-click="true"]');
+
+        if (audioTrigger) {
+            const audio = new Audio('/sounds/click-feedback.mp3');
+            audio.volume = 0.5;
+            audio.play().catch(() => {
+                // Ignore autoplay errors or other playback issues
+            });
+        }
+    });
+
+    // Preload the audio to avoid delay on first click
+    const preloadAudio = new Audio('/sounds/click-feedback.mp3');
+    preloadAudio.preload = 'auto';
+</script>

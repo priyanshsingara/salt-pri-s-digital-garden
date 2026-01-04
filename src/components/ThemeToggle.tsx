@@ -30,6 +30,7 @@ export default function ThemeToggle() {
             onClick={toggleTheme}
             className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
             aria-label="Toggle Dark Mode"
+            data-audio-click="true"
         >
             {theme === 'light' ? (
                 // Sun Icon

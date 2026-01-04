@@ -68,6 +68,7 @@ export default function Tabs({ activeTab, onTabChange }: TabsProps) {
                 isActive={activeTab === 'thoughts'}
                 onClick={() => onTabChange('thoughts')}
                 isDark={isDark}
+                data-audio-click="true"
             >
                 thoughts
             </TabButton>
@@ -77,6 +78,7 @@ export default function Tabs({ activeTab, onTabChange }: TabsProps) {
                 isActive={activeTab === 'topics'}
                 onClick={() => onTabChange('topics')}
                 isDark={isDark}
+                data-audio-click="true"
             >
                 topics
             </TabButton>
