@@ -18,7 +18,7 @@ export default function BlogCard({ slug, title, date }: BlogCardProps) {
             style={{ textDecoration: 'none' }}
             data-audio-click="true"
         >
-            <div className="flex items-center gap-[20px] grow">
+            <div className="flex items-center gap-[20px] grow max-sm:flex-col max-sm:items-start max-sm:gap-[8px]">
                 <span
                     className="shrink-0 text-[16px] text-[#878580] dark:text-[#575653] leading-[1.4]"
                     style={{ fontFamily: "'Geist Mono', monospace", fontWeight: 400 }}
