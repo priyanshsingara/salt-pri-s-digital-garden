@@ -7,9 +7,13 @@ import AudioFeedback from '../components/AudioFeedback.astro';
 interface Props {
 	title: string;
 	description?: string;
+	image?: string;
 }
 
-const { title, description = "A digital garden." } = Astro.props;
+const siteUrl = "https://priyanshsingara-blog.vercel.app";
+const defaultDescription = "I'm Priyansh Singara. I spend most of my time thinking of product ideas I wish existed. This space is for my unfiltered thoughts and observations—a brain dump I can look back on.";
+const { title, description = defaultDescription, image = "/og-image.png" } = Astro.props;
+const ogImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
 ---
 
 <!doctype html>
@@ -18,8 +22,29 @@ const { title, description = "A digital garden." } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width" />
+		
+		<!-- Favicon -->
+		<link rel="icon" type="image/png" href="/favicon.png" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/favicon.png" />
+		
 		<meta name="generator" content={Astro.generator} />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={siteUrl} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:site_name" content="priyansh singara's thoughts" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content={siteUrl} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageUrl} />
+		<meta name="twitter:creator" content="@priyanshsingara" />
 
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
