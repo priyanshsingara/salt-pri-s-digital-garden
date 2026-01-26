@@ -18,6 +18,9 @@ const PROJECT_ROOT = process.cwd();
 const IMAGES_DIR = join(PROJECT_ROOT, 'public', 'images');
 const MANIFEST_PATH = join(IMAGES_DIR, 'manifest.json');
 
+// Detect dev mode to avoid infinite file-watch loops
+const IS_DEV = import.meta.env?.DEV ?? process.env.NODE_ENV !== 'production';
+
 // Additional output directories to ensure images are in final build
 const OUTPUT_DIRS = [
     join(PROJECT_ROOT, 'dist', 'images'),
@@ -142,6 +145,12 @@ function saveManifest(manifest: ImageManifest): void {
  * Returns the content with rewritten URLs
  */
 export async function syncImages(content: string): Promise<string> {
+    // In dev mode, skip image downloading to avoid infinite file-watch loops
+    // Images will still work via Notion's URLs (they expire, but fine for dev)
+    if (IS_DEV) {
+        return content;
+    }
+
     // Ensure images directory exists
     if (!existsSync(IMAGES_DIR)) {
         mkdirSync(IMAGES_DIR, { recursive: true });

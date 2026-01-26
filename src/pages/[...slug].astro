@@ -52,7 +52,7 @@ const { post, htmlContent, currentBacklinks } = Astro.props;
 <Layout title={post.title}>
   <article class="prose max-w-none mt-[44px]">
     <div class="flex flex-col gap-[4px] mb-[44px]">
-        <h1 class="text-[32px] leading-[1.5] font-semibold tracking-[-0.32px] text-[#cecdc3] !m-0">{post.title}</h1>
+        <h1 class="text-[32px] leading-[1.25] font-bold tracking-[-0.32px] text-[#cecdc3] !m-0">{post.title}</h1>
         <div class="flex items-center gap-[8px] text-[18px] leading-[1.5] font-light font-sans max-sm:flex-col max-sm:items-start">
         <span class="text-[#878580]">
             {new Date(post.date).toLocaleDateString('en-US', { 
