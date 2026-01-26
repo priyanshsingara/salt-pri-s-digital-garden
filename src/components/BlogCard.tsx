@@ -20,14 +20,14 @@ export default function BlogCard({ slug, title, date }: BlogCardProps) {
         >
             <div className="flex items-center gap-[20px] grow max-sm:flex-col max-sm:items-start max-sm:gap-[8px]">
                 <span
-                    className="shrink-0 text-[16px] text-[#878580] dark:text-[#575653] leading-[1.4]"
-                    style={{ fontFamily: "'Geist Mono', monospace", fontWeight: 400 }}
+                    className="shrink-0 text-[16px] text-[#878580] dark:text-[#575653] leading-[1.5]"
+                    style={{ fontFamily: "'Geist Mono', monospace", fontWeight: 400, fontFeatureSettings: '"tnum" 1' }}
                 >
                     {year} • {month}
                 </span>
                 <span
-                    className="text-[18px] text-[#100F0F] dark:text-[#cecdc3] transition-colors leading-[1.4] grow"
-                    style={{ fontFamily: "'Geist', sans-serif", fontWeight: 400 }}
+                    className="text-[18px] text-[#100F0F] dark:text-[#cecdc3] transition-colors leading-[1.5] grow"
+                    style={{ fontFamily: "'Geist', sans-serif", fontWeight: 400, fontFeatureSettings: '"ss02" 1' }}
                 >
                     {title}
                 </span>

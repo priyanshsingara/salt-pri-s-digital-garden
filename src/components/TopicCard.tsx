@@ -15,14 +15,14 @@ export default function TopicCard({ name, count }: TopicCardProps) {
         >
             <div className="flex items-center gap-[20px] grow">
                 <span
-                    className="shrink-0 text-[16px] text-[#878580] dark:text-[#575653] leading-[1.4]"
-                    style={{ fontFamily: "'Geist Mono', monospace", fontWeight: 400 }}
+                    className="shrink-0 text-[16px] text-[#878580] dark:text-[#575653] leading-[1.5]"
+                    style={{ fontFamily: "'Geist Mono', monospace", fontWeight: 400, fontFeatureSettings: '"tnum" 1' }}
                 >
                     {String(count).padStart(3, '0')}
                 </span>
                 <span
-                    className="text-[18px] text-[#100F0F] dark:text-[#cecdc3] transition-colors leading-[1.4] grow"
-                    style={{ fontFamily: "'Geist', sans-serif", fontWeight: 400 }}
+                    className="text-[18px] text-[#100F0F] dark:text-[#cecdc3] transition-colors leading-[1.5] grow"
+                    style={{ fontFamily: "'Geist', sans-serif", fontWeight: 400, fontFeatureSettings: '"ss02" 1' }}
                 >
                     {name}
                 </span>
