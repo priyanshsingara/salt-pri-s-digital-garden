@@ -108,6 +108,7 @@ const TabButton = React.forwardRef<HTMLButtonElement, TabButtonProps>(
                 className="relative z-10 px-[16px] py-[8px] text-[18px] leading-[1.5] rounded-[56px] transition-colors duration-200 focus:outline-none focus:ring-0 active:outline-none border-0 bg-transparent cursor-pointer select-none"
                 style={{
                     fontFamily: "'Geist', sans-serif",
+                    fontFeatureSettings: '"ss02" 1', // Swiss geometry
                     color: textColor,
                     WebkitTapHighlightColor: 'transparent', // Remove mobile highlight
                 }}

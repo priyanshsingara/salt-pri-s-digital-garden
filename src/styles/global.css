@@ -103,31 +103,36 @@
 body {
     @apply bg-bg-main text-text-main font-sans antialiased selection:bg-ui-hover selection:text-text-main;
     font-size: 18px;
-    /* Updated to 18px */
+    line-height: 1.5;
     letter-spacing: 0;
+    font-feature-settings: "ss02" 1; /* Swiss geometry for Geist */
 }
 
 /* Typography styles */
 h1 {
     @apply font-semibold mb-8 text-text-main;
     font-size: 32px;
-    letter-spacing: -0.32px;
+    line-height: 1.2;
+    letter-spacing: -0.02em; /* Tighter tracking for display text */
 }
 
 h2 {
     @apply text-xl font-semibold mt-12 mb-6 text-text-main;
     font-size: 24px;
-    letter-spacing: 0;
+    line-height: 1.33;
+    letter-spacing: -0.02em;
 }
 
 h3 {
     @apply text-lg font-semibold mt-8 mb-4 text-text-main;
     font-size: 18px;
-    letter-spacing: 0;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
 }
 
 p {
-    @apply leading-relaxed text-text-main max-w-[65ch];
+    @apply text-text-main max-w-[65ch];
+    line-height: 1.5;
 }
 
 /* Links */
@@ -144,6 +149,7 @@ a:hover {
 /* Meta text */
 .meta {
     @apply text-[16px] text-text-muted font-mono;
+    font-feature-settings: "tnum" 1; /* Tabular numbers for alignment */
 }
 
 /* =============================================================================
@@ -173,7 +179,8 @@ a:hover {
 .markdown-body h1 {
     font-size: 32px;
     font-weight: 600;
-    letter-spacing: -0.32px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
     margin-top: 48px;
     margin-bottom: 16px;
     color: var(--text-main);
@@ -186,7 +193,8 @@ a:hover {
 .markdown-body h2 {
     font-size: 24px;
     font-weight: 600;
-    letter-spacing: 0;
+    line-height: 1.33;
+    letter-spacing: -0.02em;
     margin-top: 48px;
     margin-bottom: 16px;
     color: var(--text-main);
@@ -199,7 +207,8 @@ a:hover {
 .markdown-body h3 {
     font-size: 18px;
     font-weight: 600;
-    letter-spacing: 0;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
     margin-top: 32px;
     margin-bottom: 12px;
     color: var(--text-main);
@@ -251,7 +260,7 @@ a:hover {
 /* List items */
 .markdown-body li {
     margin-bottom: 8px;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 .markdown-body li:last-child {
@@ -281,6 +290,7 @@ a:hover {
     font-family: var(--font-mono);
     font-size: 16px;
     line-height: 1.5;
+    font-feature-settings: "liga" 0, "calt" 0, "tnum" 1, "zero" 1; /* No ligatures, tabular nums, slashed zero */
 }
 
 .markdown-body pre code {
@@ -296,8 +306,10 @@ a:hover {
     padding: 2px 6px;
     border-radius: 4px;
     font-family: var(--font-mono);
-    font-size: 0.9em;
+    font-size: 0.875em; /* 14px - clean number */
+    font-weight: 500; /* Medium weight for small text per Geist guidelines */
     color: var(--text-main);
+    font-feature-settings: "tnum" 1, "zero" 1;
 }
 
 /* =============================================================================
@@ -307,9 +319,9 @@ a:hover {
 .markdown-body blockquote {
     margin: 0 0 24px 0;
     padding: 0 0 0 16px;
-    border-left: 3px solid var(--ui-border);
+    border-left: 2px solid var(--ui-border); /* Refined: 2px for Swiss minimalism */
     color: var(--text-muted);
-    font-style: italic;
+    /* Removed italic - Geist has no true italics */
 }
 
 .markdown-body blockquote p {
@@ -344,7 +356,7 @@ a:hover {
 
 .markdown-body .callout-content {
     flex: 1;
-    line-height: 1.6;
+    line-height: 1.5;
 }
 
 /* =============================================================================
@@ -399,6 +411,8 @@ a:hover {
     margin-top: 8px;
     text-align: center;
     font-size: 14px;
+    font-weight: 500; /* Medium weight for small text */
+    letter-spacing: 0.03em; /* +3% for text below 16px */
     color: var(--text-muted);
 }
 
@@ -461,31 +475,40 @@ a:hover {
         font-size: 16px;
     }
 
+    /* Small text on mobile: increase weight and letter-spacing per Geist guidelines */
     .meta,
     code,
     pre {
         font-size: 14px !important;
+        font-weight: 500;
+        letter-spacing: 0.03em; /* +3% for text below 16px */
     }
 
     /* =========================================================================
        MOBILE OPTIMIZATION FOR BLOG CONTENT (.markdown-body)
        ========================================================================= */
 
-    /* Scale down headings for mobile */
+    /* Scale down headings for mobile - maintain tight tracking */
     .markdown-body h1 {
         font-size: 24px;
+        line-height: 1.2;
+        letter-spacing: -0.02em;
         margin-top: 28px;
         margin-bottom: 12px;
     }
 
     .markdown-body h2 {
         font-size: 20px;
+        line-height: 1.33;
+        letter-spacing: -0.02em;
         margin-top: 28px;
         margin-bottom: 12px;
     }
 
     .markdown-body h3 {
         font-size: 17px;
+        line-height: 1.4;
+        letter-spacing: -0.01em;
         margin-top: 20px;
         margin-bottom: 10px;
     }
@@ -537,6 +560,8 @@ a:hover {
     /* Tables - scrollable container with smaller text */
     .markdown-body table {
         font-size: 14px;
+        font-weight: 500; /* Medium weight for small text */
+        letter-spacing: 0.03em; /* +3% for text below 16px */
         display: block;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
