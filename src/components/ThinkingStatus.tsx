@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 
 /**
  * The shimmering status word in the homepage header ("priyansh is //thinking...").
  *
  * Starts on "thinking" and then cycles forever through the word pool at random,
- * never showing the same word twice in a row. Each word crossfades into the next
- * while the shimmer (the `.thinking` background animation) keeps running on the
- * outer span, so the light sweep never restarts.
+ * never showing the same word twice in a row. Words crossfade with a blur — the
+ * outgoing word blurs out while the incoming word blurs in at the same time, so
+ * the text is never empty — while the `.thinking` shimmer keeps sweeping.
  */
 
 // "thinking" first, then the word list. All lowercase to match the brand.
@@ -20,8 +21,7 @@ const WORDS = [
     'choreographing', 'waltzing',
 ];
 
-const INTERVAL_MS = 2200;
-const FADE_MS = 260;
+const INTERVAL_MS = 2500;
 
 /** Pick a random word from the pool, never the one currently shown. */
 function pickNext(current: string): string {
@@ -34,41 +34,32 @@ function pickNext(current: string): string {
 
 export default function ThinkingStatus() {
     const [word, setWord] = useState('thinking');
-    const [visible, setVisible] = useState(true);
-    const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+    const reduceMotion = useReducedMotion();
 
     useEffect(() => {
-        // Respect reduced-motion: stay on a static "thinking" (no cycling).
-        const reduce =
-            typeof window !== 'undefined' &&
-            window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-        if (reduce) return;
+        if (reduceMotion) return; // stay on a static "thinking…"
+        const id = setInterval(() => setWord((w) => pickNext(w)), INTERVAL_MS);
+        return () => clearInterval(id);
+    }, [reduceMotion]);
 
-        const interval = setInterval(() => {
-            setVisible(false); // fade current word out
-            const swap = setTimeout(() => {
-                setWord((w) => pickNext(w)); // swap while invisible
-                setVisible(true); // fade next word in
-            }, FADE_MS);
-            timers.current.push(swap);
-        }, INTERVAL_MS);
-
-        return () => {
-            clearInterval(interval);
-            timers.current.forEach(clearTimeout);
-            timers.current = [];
-        };
-    }, []);
+    if (reduceMotion) {
+        return <span className="thinking">thinking…</span>;
+    }
 
     return (
-        <span className="thinking">
-            <span
-                className="transition-opacity ease-in-out"
-                style={{ transitionDuration: `${FADE_MS}ms`, opacity: visible ? 1 : 0 }}
-            >
-                {word}
-            </span>
-            …
+        <span className="relative inline-block align-baseline">
+            <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span
+                    key={word}
+                    className="thinking inline-block"
+                    initial={{ opacity: 0, filter: 'blur(10px)', y: '0.14em' }}
+                    animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+                    exit={{ opacity: 0, filter: 'blur(10px)', y: '-0.14em' }}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                >
+                    {word}…
+                </motion.span>
+            </AnimatePresence>
         </span>
     );
 }
