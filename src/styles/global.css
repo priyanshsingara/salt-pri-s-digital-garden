@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
     /* 
@@ -43,6 +42,19 @@
     --color-purple-400: #8B7EC8;
     --color-magenta-400: #CE5D97;
 
+    /*
+       Tag Chip Palette
+       The only colors used for tag chips. Assigned pseudo-randomly per post
+       (see src/pages/index.astro) and repeated across the feed.
+    */
+    --color-tag-olive: #C4D39B;
+    --color-tag-cyan: #99F7FA;
+    --color-tag-purple: #D99AEF;
+    --color-tag-blue: #68C0FF;
+    --color-tag-green: #49CF00;
+    --color-tag-gold: #AC8E00;
+    --color-tag-orange: #FF9A00;
+
     /* Semantic Token Aliases for Tailwind */
     --color-bg-main: var(--bg-main);
     --color-bg-subtle: var(--bg-subtle);
@@ -57,42 +69,24 @@
     --color-link-hover: var(--link-hover);
 
     /* Fonts */
-    --font-sans: "Geist", sans-serif;
-    --font-mono: "Geist Mono", monospace;
+    --font-sans: "Bricolage Grotesque", sans-serif; /* Brand + headings + UI */
+    --font-mono: "Geist Mono", monospace;           /* Numbers / meta */
+    --font-prose: "Geist", sans-serif;              /* Long-form article body */
+    --font-tag: "Doto", monospace;                  /* Tag chips */
 }
 
 :root {
-    /* Semantic Mappings - Light Mode */
-    --bg-main: var(--color-flexoki-paper);
-    --bg-subtle: var(--color-flexoki-50);
-
-    --ui-border: var(--color-flexoki-100);
-    /* Fixed: Was 200, now 100 to match Figma #E6E4D9 */
-    --ui-hover: var(--color-flexoki-150);
-
-    --text-main: var(--color-flexoki-black);
-    /* Fixed: Was 600, now 500 to match Figma */
-    --text-muted: var(--color-flexoki-500);
-    --text-faint: var(--color-flexoki-300);
-
-    --link: var(--color-cyan-400);
-    /* Fixed: Was 600, now 400 to match Figma #3AA99F */
-    --link-hover: var(--color-cyan-600);
-    /* Keep hover slightly darker/different or same? Standard is same usually for simple text links, but let's keep 600 for contrast on hover? Or just 400? Let's try 600 for interaction feedback. */
-}
-
-.dark {
-    /* Semantic Mappings - Dark Mode */
+    /*
+       Semantic Mappings - Dark mode only.
+       The site no longer ships a light theme or a theme toggle.
+    */
     --bg-main: var(--color-flexoki-black);
     --bg-subtle: var(--color-flexoki-950);
 
     --ui-border: var(--color-flexoki-950);
-    /* Updated to darker border */
     --ui-hover: var(--color-flexoki-850);
 
-    /* Updated to match Figma #CECDC3 */
     --text-main: var(--color-flexoki-200);
-    /* Updated to match Figma #878580 */
     --text-muted: var(--color-flexoki-500);
     --text-faint: var(--color-flexoki-700);
 
@@ -105,7 +99,44 @@ body {
     font-size: 18px;
     line-height: 1.5;
     letter-spacing: 0;
-    font-feature-settings: "ss02" 1; /* Swiss geometry for Geist */
+    /* Bricolage Grotesque optical axes, matching the Figma design. */
+    font-variation-settings: "opsz" 14, "wdth" 100;
+}
+
+/* =============================================================================
+   "//thinking..." AI shimmer
+   The gradient (white -> #423838 -> #d9d9d9) sweeps horizontally to mimic the
+   "AI is thinking" state. Honors prefers-reduced-motion.
+   ============================================================================= */
+.thinking {
+    background-image: linear-gradient(
+        100deg,
+        #423838 0%,
+        #d9d9d9 35%,
+        #ffffff 50%,
+        #d9d9d9 65%,
+        #423838 100%
+    );
+    background-size: 220% 100%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: thinking-shimmer 3s linear infinite;
+}
+
+@keyframes thinking-shimmer {
+    from { background-position: 120% 50%; }
+    to   { background-position: -20% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .thinking {
+        animation: none;
+        /* Static fallback ≈ the resting Figma gradient. */
+        background-position: 50% 50%;
+    }
 }
 
 /* Typography styles */
@@ -156,6 +187,12 @@ a:hover {
    BLOG CONTENT STYLES (.markdown-body only)
    These styles ONLY apply inside blog post content, not homepage or other pages
    ============================================================================= */
+
+/* Long-form article body uses the readable prose font (Geist) */
+.markdown-body {
+    font-family: var(--font-prose);
+    font-feature-settings: "ss02" 1; /* Swiss geometry for Geist */
+}
 
 /* Base spacing for all block elements */
 .markdown-body>* {
