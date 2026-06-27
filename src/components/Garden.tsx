@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { motion } from 'motion/react';
 
 export interface GardenPost {
     /** Display index, e.g. "007". Newest post has the highest number. */
@@ -21,6 +22,8 @@ interface GardenProps {
  */
 export default function Garden({ posts }: GardenProps) {
     const [query, setQuery] = useState('');
+    // Slug of the row currently hovered; when set, every other row dims.
+    const [hovered, setHovered] = useState<string | null>(null);
 
     const filtered = useMemo(() => {
         const q = query.trim().toLowerCase();
@@ -36,13 +39,20 @@ export default function Garden({ posts }: GardenProps) {
         <div className="flex flex-col flex-1 min-h-0">
             {/* Scrollable post list */}
             <main className="flex-1 min-h-0 overflow-y-auto px-[32px] py-[32px] max-sm:px-5 max-sm:py-6">
-                <div className="flex flex-col gap-[6px]">
+                <div
+                    className="flex flex-col gap-[6px]"
+                    onMouseLeave={() => setHovered(null)}
+                >
                     {filtered.map((post) => (
-                        <a
+                        <motion.a
                             key={post.slug}
                             href={`/${post.slug}`}
                             data-audio-click="true"
+                            onMouseEnter={() => setHovered(post.slug)}
                             style={{ ['--tag' as string]: post.color }}
+                            initial={false}
+                            animate={{ opacity: hovered && hovered !== post.slug ? 0.2 : 1 }}
+                            transition={{ duration: 0.25, ease: 'easeOut' }}
                             className="group flex items-center gap-[16px] py-[2px] !no-underline hover:!no-underline focus:!no-underline max-sm:flex-wrap max-sm:gap-x-[12px] max-sm:gap-y-1"
                         >
                             {/* Index badge */}
@@ -76,7 +86,7 @@ export default function Garden({ posts }: GardenProps) {
                             <span className="-mx-[6px] px-[6px] py-[1px] text-white font-semibold tracking-[-0.02em] leading-[1.1] text-[clamp(20px,2.2vw,32px)] transition-colors group-hover:text-flexoki-black group-hover:[background-color:var(--tag)] max-sm:basis-full">
                                 {post.title}
                             </span>
-                        </a>
+                        </motion.a>
                     ))}
 
                     {filtered.length === 0 && (

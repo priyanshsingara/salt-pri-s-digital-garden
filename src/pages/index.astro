@@ -18,44 +18,31 @@ try {
   error = "Failed to load Digital Garden. Check API keys.";
 }
 
-// The only colors a tag chip may ever use.
+// The only colors a tag chip may ever use (the design's 7 colors).
+// Ordered so neighbouring chips stay visually distinct; assigned in sequence
+// by position (below) so every color appears in turn and never clusters.
 const TAG_COLORS = [
-  '#C4D39B', // olive
-  '#99F7FA', // cyan
-  '#D99AEF', // purple
+  '#FF9A00', // orange
   '#68C0FF', // blue
   '#49CF00', // green
+  '#D99AEF', // purple
   '#AC8E00', // gold
-  '#FF9A00', // orange
+  '#99F7FA', // cyan
+  '#C4D39B', // olive
 ];
-
-// Stable per-post hash so the color is the same on every build/render.
-function hashString(str: string): number {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) {
-    h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
-  }
-  return Math.abs(h);
-}
 
 // Newest post (index 0) gets the highest number; e.g. 7 posts -> 007 at top.
 // Add an 8th post in Notion and it becomes 008 at the top automatically.
 const total = posts.length;
-let prevColor = -1;
 const gardenPosts: GardenPost[] = posts.map((post, i) => {
-  let colorIndex = hashString(post.slug || post.title) % TAG_COLORS.length;
-  // Avoid two identical chip colors back-to-back so the feed stays lively.
-  if (colorIndex === prevColor) {
-    colorIndex = (colorIndex + 1) % TAG_COLORS.length;
-  }
-  prevColor = colorIndex;
-
   return {
     number: String(total - i).padStart(3, '0'),
     title: post.title,
     slug: post.slug,
     tags: post.tags,
-    color: TAG_COLORS[colorIndex],
+    // Cycle the palette by position: each color appears in turn, so all 7
+    // are used before any repeats and neighbours are always different.
+    color: TAG_COLORS[i % TAG_COLORS.length],
   };
 });
 ---

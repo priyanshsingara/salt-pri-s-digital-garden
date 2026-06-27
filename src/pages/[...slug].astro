@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Reveal from '../components/Reveal';
 import { getPublishedPosts } from '../lib/notion';
 import { parseContent } from '../lib/content-parser';
 
@@ -70,7 +71,10 @@ const { post, htmlContent, currentBacklinks } = Astro.props;
         </div>
     </div>
     
-    <div class="markdown-body text-[18px] leading-relaxed text-text-main" set:html={htmlContent} />
+    <noscript>
+      <style>.markdown-body{opacity:1!important;filter:none!important;transform:none!important}</style>
+    </noscript>
+    <Reveal client:load html={htmlContent} className="markdown-body text-[18px] leading-relaxed text-text-main" />
   </article>
 
   {currentBacklinks.length > 0 && (
