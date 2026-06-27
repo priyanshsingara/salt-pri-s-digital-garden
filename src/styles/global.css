@@ -109,31 +109,33 @@ body {
    repeating — the "AI is thinking" effect. Honors prefers-reduced-motion.
    ============================================================================= */
 .thinking {
-    /* Dimmed base text with a single bright band that travels across it. */
+    /* Dimmed base text with a soft, wide bright band that glides across it.
+       Wider-than-text background (300%) guarantees full coverage at every
+       frame, and the gentle peak (no hard edges) keeps the sweep buttery. */
     background-image: linear-gradient(
         100deg,
-        rgba(255, 255, 255, 0.4) 0%,
-        rgba(255, 255, 255, 0.4) 42%,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.45) 38%,
+        rgba(255, 255, 255, 0.85) 47%,
         #ffffff 50%,
-        rgba(255, 255, 255, 0.4) 58%,
-        rgba(255, 255, 255, 0.4) 100%
+        rgba(255, 255, 255, 0.85) 53%,
+        rgba(255, 255, 255, 0.45) 62%,
+        rgba(255, 255, 255, 0.45) 100%
     );
-    /* Wider than the text so the gradient always covers it (no bare spots);
-       the bright band travels across as background-position animates 0% -> 100%. */
     background-size: 300% 100%;
     background-repeat: no-repeat;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    animation: thinking-shimmer 3.2s ease-in-out infinite;
+    /* Continuous, constant-velocity sweep — never pauses. */
+    animation: thinking-shimmer 3s linear infinite;
+    will-change: background-position;
 }
 
 @keyframes thinking-shimmer {
-    0%   { background-position: 100% 50%; }
-    55%  { background-position: 0% 50%; }
-    /* hold the resting state to create the repeat delay between sweeps */
-    100% { background-position: 0% 50%; }
+    from { background-position: 100% 50%; }
+    to   { background-position: 0% 50%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

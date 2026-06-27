@@ -1,6 +1,7 @@
 ---
 import HomeLayout from '../layouts/HomeLayout.astro';
 import Garden from '../components/Garden';
+import ThinkingStatus from '../components/ThinkingStatus';
 import type { GardenPost } from '../components/Garden';
 import { getPublishedPosts } from '../lib/notion';
 import type { Post } from '../lib/notion';
@@ -60,11 +61,11 @@ const gardenPosts: GardenPost[] = posts.map((post, i) => {
 ---
 
 <HomeLayout title="priyansh is // thinking...">
-  <div class="flex flex-col h-screen w-full">
+  <div class="flex flex-col h-[100dvh] w-full">
     <!-- Header -->
     <header class="shrink-0 bg-white/[0.02] px-[32px] py-[16px] max-sm:px-5">
-      <h1 class="!m-0 font-medium !text-white tracking-[-0.02em] leading-[1.15] text-[clamp(32px,5vw,72px)]">
-        <span>priyansh is //</span><span class="thinking">thinking...</span>
+      <h1 class="!m-0 font-medium !text-white tracking-[-0.02em] leading-[1.15] text-[clamp(26px,6vw,72px)]">
+        <span>priyansh is //</span><ThinkingStatus client:load />
       </h1>
     </header>
 
