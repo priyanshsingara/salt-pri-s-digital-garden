@@ -96,7 +96,8 @@ export default function Garden({ posts }: GardenProps) {
                     aria-label="Search posts by title or tag"
                     autoComplete="off"
                     spellCheck={false}
-                    className="w-full bg-transparent border-0 outline-none text-white caret-white placeholder:text-white/25 font-semibold tracking-[-0.03em] leading-[1.1] text-[clamp(28px,5vw,64px)]"
+                    autoFocus
+                    className="w-full bg-transparent border-0 outline-none text-white caret-white placeholder:text-white/25 font-semibold tracking-[-0.04em] leading-[1.1] text-[clamp(32px,5vw,72px)]"
                 />
             </div>
         </div>
