@@ -48,7 +48,7 @@ const ogImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
 
 		<title>{title}</title>
 	</head>
-	<body class="bg-bg-main text-text-main font-sans antialiased h-screen overflow-hidden">
+	<body class="bg-bg-main text-text-main font-sans antialiased h-[100dvh] overflow-hidden">
 		<slot />
 		<AudioFeedback />
 	</body>

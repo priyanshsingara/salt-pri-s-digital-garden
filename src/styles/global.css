@@ -105,37 +105,44 @@ body {
 
 /* =============================================================================
    "//thinking..." AI shimmer
-   The gradient (white -> #423838 -> #d9d9d9) sweeps horizontally to mimic the
-   "AI is thinking" state. Honors prefers-reduced-motion.
+   A bright highlight band sweeps across dimmed text, then pauses before
+   repeating — the "AI is thinking" effect. Honors prefers-reduced-motion.
    ============================================================================= */
 .thinking {
+    /* Dimmed base text with a soft, wide bright band that glides across it.
+       Wider-than-text background (300%) guarantees full coverage at every
+       frame, and the gentle peak (no hard edges) keeps the sweep buttery. */
     background-image: linear-gradient(
         100deg,
-        #423838 0%,
-        #d9d9d9 35%,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.45) 38%,
+        rgba(255, 255, 255, 0.85) 47%,
         #ffffff 50%,
-        #d9d9d9 65%,
-        #423838 100%
+        rgba(255, 255, 255, 0.85) 53%,
+        rgba(255, 255, 255, 0.45) 62%,
+        rgba(255, 255, 255, 0.45) 100%
     );
-    background-size: 220% 100%;
+    background-size: 300% 100%;
     background-repeat: no-repeat;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
+    /* Continuous, constant-velocity sweep — never pauses. */
     animation: thinking-shimmer 3s linear infinite;
+    will-change: background-position;
 }
 
 @keyframes thinking-shimmer {
-    from { background-position: 120% 50%; }
-    to   { background-position: -20% 50%; }
+    from { background-position: 100% 50%; }
+    to   { background-position: 0% 50%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .thinking {
         animation: none;
-        /* Static fallback ≈ the resting Figma gradient. */
-        background-position: 50% 50%;
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 0.6);
     }
 }
 
