@@ -1,6 +1,7 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Feed from '../components/Feed';
+import HomeLayout from '../layouts/HomeLayout.astro';
+import Garden from '../components/Garden';
+import type { GardenPost } from '../components/Garden';
 import { getPublishedPosts } from '../lib/notion';
 import type { Post } from '../lib/notion';
 
@@ -16,54 +17,70 @@ try {
   error = "Failed to load Digital Garden. Check API keys.";
 }
 
-// Calculate Topic Counts
-const tagCounts: Record<string, number> = {};
-posts.forEach(post => {
-  post.tags.forEach(tag => {
-    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-  });
-});
+// The only colors a tag chip may ever use.
+const TAG_COLORS = [
+  '#C4D39B', // olive
+  '#99F7FA', // cyan
+  '#D99AEF', // purple
+  '#68C0FF', // blue
+  '#49CF00', // green
+  '#AC8E00', // gold
+  '#FF9A00', // orange
+];
 
-const uniqueTopics = Object.entries(tagCounts)
-  .map(([name, count]) => ({ name, count }))
-  .sort((a, b) => a.name.localeCompare(b.name));
+// Stable per-post hash so the color is the same on every build/render.
+function hashString(str: string): number {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+}
+
+// Newest post (index 0) gets the highest number; e.g. 7 posts -> 007 at top.
+// Add an 8th post in Notion and it becomes 008 at the top automatically.
+const total = posts.length;
+let prevColor = -1;
+const gardenPosts: GardenPost[] = posts.map((post, i) => {
+  let colorIndex = hashString(post.slug || post.title) % TAG_COLORS.length;
+  // Avoid two identical chip colors back-to-back so the feed stays lively.
+  if (colorIndex === prevColor) {
+    colorIndex = (colorIndex + 1) % TAG_COLORS.length;
+  }
+  prevColor = colorIndex;
+
+  return {
+    number: String(total - i).padStart(3, '0'),
+    title: post.title,
+    slug: post.slug,
+    tags: post.tags,
+    color: TAG_COLORS[colorIndex],
+  };
+});
 ---
 
-<Layout title="priyansh singara's thoughts">
-  {error && (
-    <div class="bg-red-50 text-red-600 p-4 rounded-lg border border-red-200">
-      <p class="font-bold">Error:</p>
-      <p>{error}</p>
-    </div>
-  )}
+<HomeLayout title="priyansh is // thinking...">
+  <div class="flex flex-col h-screen w-full">
+    <!-- Header -->
+    <header class="shrink-0 bg-white/[0.02] px-[32px] py-[16px] max-sm:px-5">
+      <h1 class="!m-0 font-medium !text-white tracking-[-0.02em] leading-[1.05] text-[clamp(32px,5vw,72px)]">
+        priyansh is //thinking...
+      </h1>
+    </header>
 
-  {!posts.length && !error && (
-    <div class="text-text-muted italic py-12 text-center">
-      Garden is currently empty. Write something in Notion!
-    </div>
-  )}
+    {error && (
+      <div class="px-[32px] py-4 text-[18px] text-tag-orange max-sm:px-5">
+        {error}
+      </div>
+    )}
 
-  {posts.length > 0 && (
-    <div class="flex flex-col gap-[36px] mt-[36px]">
-      <!-- Divider 1 -->
-      <hr class="border-0 h-px w-full bg-ui-border !my-0" />
+    {!error && gardenPosts.length === 0 && (
+      <div class="px-[32px] py-8 text-[18px] text-text-muted max-sm:px-5">
+        Garden is currently empty. Write something in Notion!
+      </div>
+    )}
 
-      <!-- Bio Section with internal 36px gap -->
-      <section class="flex flex-col gap-[36px]">
-        <p class="text-[18px] leading-[1.5] text-text-muted !m-0">
-          I spend most of my time thinking of product ideas i wish existed. This space is for me to write in my unfiltered thoughts and observations! It's basically a brain dump that I can look back when I want to see how I used to think at a specific point in time. I'm big on cafe hopping, art and products in general. I largely have weird thoughts so proceed with caution...
-        </p>
-        
-        <p class="text-[18px] leading-[1.5] text-text-muted !m-0">
-          Reach out via <a href="mailto:priyanshsingara@gmail.com" class="text-text-main hover:text-text-muted transition-colors underline decoration-ui-border underline-offset-4">email</a>, <a href="https://twitter.com/priyanshsingara" class="text-text-main hover:text-text-muted transition-colors underline decoration-ui-border underline-offset-4">twitter</a>, <a href="https://www.linkedin.com/in/priyanshsingara/" class="text-text-main hover:text-text-muted transition-colors underline decoration-ui-border underline-offset-4">linkedin</a> or <a href="https://cal.com/priyanshsingara" class="text-text-main hover:text-text-muted transition-colors underline decoration-ui-border underline-offset-4">schedule time here</a>. You can also look at my portfolio at <a href="https://priyanshsingara.framer.website" class="text-text-main hover:text-text-muted transition-colors underline decoration-ui-border underline-offset-4">priyanshsingara.framer.website</a>, I trust you will like it.
-        </p>
-      </section>
-
-      <!-- Divider 2 -->
-      <hr class="border-0 h-px w-full bg-ui-border" />
-
-      <!-- Feed (Tabs + Card Container) -->
-      <Feed client:load posts={posts} topics={uniqueTopics} />
-    </div>
-  )}
-</Layout>
+    <!-- Feed + search (interactive) -->
+    <Garden client:load posts={gardenPosts} />
+  </div>
+</HomeLayout>
