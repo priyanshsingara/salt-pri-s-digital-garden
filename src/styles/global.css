@@ -105,37 +105,42 @@ body {
 
 /* =============================================================================
    "//thinking..." AI shimmer
-   The gradient (white -> #423838 -> #d9d9d9) sweeps horizontally to mimic the
-   "AI is thinking" state. Honors prefers-reduced-motion.
+   A bright highlight band sweeps across dimmed text, then pauses before
+   repeating — the "AI is thinking" effect. Honors prefers-reduced-motion.
    ============================================================================= */
 .thinking {
+    /* Dimmed base text with a single bright band that travels across it. */
     background-image: linear-gradient(
         100deg,
-        #423838 0%,
-        #d9d9d9 35%,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(255, 255, 255, 0.4) 42%,
         #ffffff 50%,
-        #d9d9d9 65%,
-        #423838 100%
+        rgba(255, 255, 255, 0.4) 58%,
+        rgba(255, 255, 255, 0.4) 100%
     );
-    background-size: 220% 100%;
+    /* Wider than the text so the gradient always covers it (no bare spots);
+       the bright band travels across as background-position animates 0% -> 100%. */
+    background-size: 300% 100%;
     background-repeat: no-repeat;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-    animation: thinking-shimmer 3s linear infinite;
+    animation: thinking-shimmer 3.2s ease-in-out infinite;
 }
 
 @keyframes thinking-shimmer {
-    from { background-position: 120% 50%; }
-    to   { background-position: -20% 50%; }
+    0%   { background-position: 100% 50%; }
+    55%  { background-position: 0% 50%; }
+    /* hold the resting state to create the repeat delay between sweeps */
+    100% { background-position: 0% 50%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .thinking {
         animation: none;
-        /* Static fallback ≈ the resting Figma gradient. */
-        background-position: 50% 50%;
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 0.6);
     }
 }
 

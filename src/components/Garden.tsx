@@ -42,7 +42,8 @@ export default function Garden({ posts }: GardenProps) {
                             key={post.slug}
                             href={`/${post.slug}`}
                             data-audio-click="true"
-                            className="group flex items-center gap-[16px] -mx-2 px-2 py-[2px] rounded-[6px] no-underline transition-colors hover:bg-white/[0.03] max-sm:flex-wrap max-sm:gap-x-[12px] max-sm:gap-y-1"
+                            style={{ ['--tag' as string]: post.color }}
+                            className="group flex items-center gap-[16px] py-[2px] !no-underline hover:!no-underline focus:!no-underline max-sm:flex-wrap max-sm:gap-x-[12px] max-sm:gap-y-1"
                         >
                             {/* Index badge */}
                             <span
@@ -71,8 +72,8 @@ export default function Garden({ posts }: GardenProps) {
                                 </span>
                             )}
 
-                            {/* Title */}
-                            <span className="grow text-white font-semibold tracking-[-0.02em] leading-[1.1] text-[clamp(20px,2.2vw,32px)] max-sm:basis-full">
+                            {/* Title — on hover, highlight with this post's tag color */}
+                            <span className="-mx-[6px] px-[6px] py-[1px] text-white font-semibold tracking-[-0.02em] leading-[1.1] text-[clamp(20px,2.2vw,32px)] transition-colors group-hover:text-flexoki-black group-hover:[background-color:var(--tag)] max-sm:basis-full">
                                 {post.title}
                             </span>
                         </a>
