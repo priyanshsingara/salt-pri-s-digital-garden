@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
+import { Search } from 'lucide-react';
 import { NumberTicker } from '@/components/motion/number-ticker';
+import { CommandPalette, type CommandItem } from '@/components/motion/command-palette';
 
 export interface GardenPost {
     /** Display index, e.g. "007". Newest post has the highest number. */
@@ -17,24 +19,39 @@ interface GardenProps {
 }
 
 /**
- * The home feed: a scrollable list of posts (number · tag chip · title)
- * with a bottom "search my mind..." bar that live-filters across the
- * post title and its tags.
+ * The home feed: a scrollable list of posts (number · tag chip · title).
+ * A bottom "Search my mind" pill (not typeable) opens a command-palette
+ * overlay that live-filters the posts by title and tags. The palette can
+ * also be opened with Cmd/Ctrl+K, or by simply starting to type on the pill.
  */
 export default function Garden({ posts }: GardenProps) {
-    const [query, setQuery] = useState('');
     // Slug of the row currently hovered; when set, every other row dims.
     const [hovered, setHovered] = useState<string | null>(null);
+    // Command-palette (search) open state.
+    const [paletteOpen, setPaletteOpen] = useState(false);
 
-    const filtered = useMemo(() => {
-        const q = query.trim().toLowerCase();
-        if (!q) return posts;
-        return posts.filter(
-            (p) =>
-                p.title.toLowerCase().includes(q) ||
-                p.tags.some((t) => t.toLowerCase().includes(q))
-        );
-    }, [query, posts]);
+    // Each post becomes a searchable palette entry. `keywords: tags` gives the
+    // palette's fuzzy match the same title+tag coverage the old search bar had.
+    const items = useMemo<CommandItem[]>(
+        () =>
+            posts.map((post) => ({
+                id: post.slug,
+                label: post.title,
+                keywords: post.tags,
+                badge: (
+                    <span
+                        className="text-[11px] leading-none text-text-faint"
+                        style={{ fontFamily: 'var(--font-mono)', fontFeatureSettings: '"tnum" 1' }}
+                    >
+                        {post.number}
+                    </span>
+                ),
+                onSelect: () => {
+                    window.location.href = `/${post.slug}`;
+                },
+            })),
+        [posts]
+    );
 
     return (
         <div className="flex flex-col flex-1 min-h-0">
@@ -44,7 +61,7 @@ export default function Garden({ posts }: GardenProps) {
                     className="flex flex-col gap-[6px]"
                     onMouseLeave={() => setHovered(null)}
                 >
-                    {filtered.map((post) => (
+                    {posts.map((post) => (
                         <motion.a
                             key={post.slug}
                             href={`/${post.slug}`}
@@ -94,28 +111,46 @@ export default function Garden({ posts }: GardenProps) {
                             </span>
                         </motion.a>
                     ))}
-
-                    {filtered.length === 0 && (
-                        <p className="text-text-muted text-[18px] leading-[1.5]">
-                            nothing matches “{query.trim()}”.
-                        </p>
-                    )}
                 </div>
             </main>
 
-            {/* Search bar */}
+            {/* Search — a non-typeable pill that opens the command palette */}
             <div className="shrink-0 border-t-[3px] border-dashed border-flexoki-900 px-[32px] py-[24px] max-sm:px-5 max-sm:py-4">
-                <input
-                    type="text"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="search my mind..."
-                    aria-label="Search posts by title or tag"
-                    autoComplete="off"
-                    spellCheck={false}
-                    className="w-full bg-transparent border-0 outline-none text-white caret-white placeholder:text-white/25 font-semibold tracking-[-0.01em] leading-[1.1] text-[24px]"
-                />
+                <button
+                    type="button"
+                    onClick={() => setPaletteOpen(true)}
+                    onKeyDown={(e) => {
+                        // Start typing to open — any printable single character.
+                        if (e.key.length === 1 && !e.metaKey && !e.ctrlKey && !e.altKey) {
+                            setPaletteOpen(true);
+                        }
+                    }}
+                    aria-label="Search"
+                    aria-haspopup="dialog"
+                    className="group inline-flex items-center gap-[12px] rounded-full border border-flexoki-800 bg-flexoki-950 pl-[18px] pr-[10px] py-[10px] text-left transition-colors hover:border-flexoki-700 hover:bg-flexoki-900 focus:outline-none focus-visible:border-flexoki-600 max-sm:w-full"
+                >
+                    <Search className="h-[18px] w-[18px] shrink-0 text-text-muted transition-colors group-hover:text-text-main" />
+                    <span className="text-[18px] font-medium tracking-[-0.01em] text-text-muted transition-colors group-hover:text-text-main max-sm:flex-1">
+                        Search my mind
+                    </span>
+                    <kbd
+                        className="ml-[8px] shrink-0 rounded-full border border-flexoki-800 px-[8px] py-[3px] text-[12px] leading-none text-text-faint"
+                        style={{ fontFamily: 'var(--font-mono)' }}
+                    >
+                        ⌘K
+                    </kbd>
+                </button>
             </div>
+
+            {/* Search overlay (portaled to <body>) */}
+            <CommandPalette
+                open={paletteOpen}
+                onOpenChange={setPaletteOpen}
+                shortcut="k"
+                placeholder="Search my mind…"
+                emptyMessage="nothing matches."
+                items={items}
+            />
         </div>
     );
 }

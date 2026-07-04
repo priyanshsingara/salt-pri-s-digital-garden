@@ -68,6 +68,19 @@
     --color-link: var(--link);
     --color-link-hover: var(--link-hover);
 
+    /*
+       shadcn/ui token aliases -> Flexoki
+       These give shadcn-style components (e.g. the command palette) their
+       expected token names, mapped onto the site's dark Flexoki palette so
+       they render on-brand instead of with a generic neutral theme.
+    */
+    --color-background: var(--color-flexoki-black);   /* backdrop tint + kbd bg */
+    --color-card: var(--color-flexoki-950);           /* elevated panel surface */
+    --color-foreground: var(--color-flexoki-100);     /* input + active-row text */
+    --color-muted-foreground: var(--text-muted);      /* placeholder, hints, inactive rows */
+    --color-border: var(--color-flexoki-850);         /* visible card / kbd border */
+    --color-primary: var(--color-flexoki-200);        /* subtle active-row wash (bg-primary/5) */
+
     /* Fonts */
     --font-sans: "Bricolage Grotesque", sans-serif; /* Brand + headings + UI */
     --font-mono: "Geist Mono", monospace;           /* Numbers / meta */
