@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
+import { NumberTicker } from '@/components/motion/number-ticker';
 
 export interface GardenPost {
     /** Display index, e.g. "007". Newest post has the highest number. */
@@ -55,7 +56,7 @@ export default function Garden({ posts }: GardenProps) {
                             transition={{ duration: 0.25, ease: 'easeOut' }}
                             className="group flex items-center gap-[16px] py-[2px] !no-underline hover:!no-underline focus:!no-underline max-sm:flex-wrap max-sm:gap-x-[12px] max-sm:gap-y-1"
                         >
-                            {/* Index badge */}
+                            {/* Index badge — number rolls up when the row enters view */}
                             <span
                                 className="shrink-0 flex items-center justify-center rounded-full border-[3px] border-white/10 p-[8px] text-[14px] leading-none text-white/80"
                                 style={{
@@ -65,7 +66,12 @@ export default function Garden({ posts }: GardenProps) {
                                     fontFeatureSettings: '"tnum" 1',
                                 }}
                             >
-                                {post.number}
+                                <NumberTicker
+                                    value={Number(post.number)}
+                                    pad={3}
+                                    duration={0.8}
+                                    className="leading-none"
+                                />
                             </span>
 
                             {/* Tag chip (comma-joined tags, one color per post) */}
